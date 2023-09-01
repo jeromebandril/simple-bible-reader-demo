@@ -24,7 +24,6 @@ impl serde::Serialize for Error {
   }
 }
 
-//data type
 #[derive(serde::Serialize,serde::Deserialize)]
 struct BibleData { 
   data: Vec<Vec<Vec<String>>>,
@@ -34,10 +33,9 @@ struct BibleData {
 fn read_bible_source(file_path: &str) -> Result<String, Error> {
   let mut file = File::open(file_path)?;
   let mut content = String::new();  
-  file.read_to_string(&mut content);
+  file.read_to_string(&mut content)?;
   Ok(content)
 }
-
 
 #[tauri::command]
 fn load_bible(content: &str) -> Result<BibleData, Error> {
@@ -45,12 +43,9 @@ fn load_bible(content: &str) -> Result<BibleData, Error> {
   Ok(parsed_data)
 }
 
-
 fn main() {
   tauri::Builder::default()
-    .invoke_handler(tauri::generate_handler![read_bible_source])
-    .invoke_handler(tauri::generate_handler![load_bible])
+    .invoke_handler(tauri::generate_handler![read_bible_source,load_bible])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
-
 }

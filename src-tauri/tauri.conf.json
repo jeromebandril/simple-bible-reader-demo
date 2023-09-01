@@ -13,7 +13,12 @@
   "tauri": {
     "allowlist": {
       "fs": {
-        "readFile": true
+        "readFile": true,
+        "readDir": true,
+        "scope": ["$RESOURCE/**"]
+      },
+      "path": {
+        "all": true
       },
       "all": false
     },

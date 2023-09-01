@@ -1,14 +1,6 @@
 <script>
 	import Header from './Header.svelte';
 	import './styles.css';
-  import { invoke } from "@tauri-apps/api/tauri";
-
-  let bible;
-  const source_path = "" ;
-
-  async function readBibleSource() {
-    bible = await invoke('read_bible_source',{source_path})
-  }
 </script>
 
 <div class="app">
