@@ -1,5 +1,7 @@
 <script>
 	import Bibleview from '$lib/Bibleview.svelte';
+  import Toolbar from '../lib/Toolbar.svelte';
+	import './styles.css';
 </script>
 
 <svelte:head>
@@ -8,10 +10,13 @@
 </svelte:head>
 
 <section>
-  <Bibleview />
+  <Toolbar/>
+  <Bibleview/>
 </section>
 
 <style>
+
+
 	section {
 		display: flex;
 		flex-direction: column;
