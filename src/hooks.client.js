@@ -11,6 +11,7 @@ invoke('read_bible_source', { filePath: resourcePath })
     // invoke('load_bible', { content: content })
     //   .then((parsedBible) => (kjvBible = parsedBible))
     //   .catch((error) => console.log(error));
+    console.log('ciaone');
     bible.set(kjvBible);
     kjvBible = null;
   })

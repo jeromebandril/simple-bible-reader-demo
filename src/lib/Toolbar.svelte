@@ -2,9 +2,9 @@
   import {bible, books, bibleData} from '../store'
 
   let bibleUsed = $bible;
-  let bibleBooks = $books
+  let bibleBooks = $books;
   let prompt = "";
-
+  // TODO: handle errors and exceptions
   function search(prompt) {
     // Divide prompt into two pieces: book reference and chapter/verse
     const matchResult = prompt.match(/(.*[a-zA-Z]\s*)(.*)/);
@@ -41,11 +41,11 @@
     const selChapter = parseInt(nums[0], 10);
     const selVerse = parseInt(nums[1], 10);
 
-    console.log(promptBook);
-    console.log(selBook);
-    console.log(selChapter);
-    console.log(selVerse);
-    console.log(bibleUsed);
+    // console.log(promptBook);
+     console.log(selBook);
+    // console.log(selChapter);
+      console.log("verse",selVerse);
+     console.log(bibleUsed);
  
     bibleData.set({
       book: selBook,
@@ -69,11 +69,9 @@
   .toolbar {
     display: flex;
     flex-direction: row;
-    min-height: 8rem;
-    height: 8rem;
+    height: 4rem;
     width: 100%;
     align-items: center;
-    position: fixed;
     top: 0;
     background: white;
   }

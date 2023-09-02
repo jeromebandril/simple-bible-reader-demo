@@ -21,8 +21,12 @@ body {
   margin: 0.5rem;
   background-attachment: fixed;
   background-color: var(--color-bg-1);
-  background-size: 100vw 100vh;
+
   overscroll-behavior: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overflow-y: hidden;
 }
 
 h1,
