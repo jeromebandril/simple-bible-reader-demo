@@ -57,7 +57,7 @@
 <svelte:window on:keydown={moveTruVerses}/>
 <div on:mousewheel={zoom} class="wrapper" style="font-size: {fontSize}px;">
   {#if $bibleData.error.code === 0}
-    <div use:scrollToVerse={selVerse} id="container" class="verses-viewport">
+    <div use:scrollToVerse={$bibleData.verse} id="container" class="verses-viewport">
       {#each $bibleData.allVerses as verse,i } 
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
