@@ -2,46 +2,42 @@
   import {bibleData, shortBooksNames} from '../store'
   import {onMount} from 'svelte'
   
+
   let currentScale = 1;
+  $: fontSize = 25 * currentScale;
   let currectSelectedVerse = $bibleData.verse;
 
   function scrollToVerse (id) {
   }
 
-  onMount(()=>{
-    // document.addEventListener('wheel', (event) => {
-    //   const zoomableText = document.querySelector('.verse');
-    //   // Check if the Ctrl key is held down (event.ctrlKey) and prevent the default
-    //   if (event.ctrlKey) {
-    //     // Calculate the new scale based on scroll direction
-    //     if (event.deltaY < 0) {
-    //       currentScale += 0.1; // Zoom in when scrolling up
-    //     } else {
-    //       currentScale -= 0.1; // Zoom out when scrolling down
-    //     }
+  function zoom (evt) {
+    if (evt.ctrlKey) {
+      // Calculate the new scale based on scroll direction
+      const zoomableText = document.querySelector('.verse');
+      if (evt.deltaY < 0) {
+        currentScale += 0.1; // Zoom in when scrolling up
+      } else {
+        currentScale -= 0.1; // Zoom out when scrolling down
+      }
 
-    //     // Limit the scale to a specific range if needed
-    //     if (currentScale < 0.5) {
-    //       currentScale = 0.5;
-    //     } else if (currentScale > 2.0) {
-    //       currentScale = 2.0;
-    //     }
+      // Limit the scale to a specific range if needed
+      if (currentScale < 0.5) {
+        currentScale = 0.5;
+      } else if (currentScale > 2.0) {
+        currentScale = 2.0;
+      }
 
-    //     // Apply the scale to the text element
-    //     zoomableText.style.transform = `scale(${currentScale})`;
-    //     console.log("zooming");
-    //     // Prevent the default behavior of the scroll event
-    //     event.preventDefault();
-    //   }
-    // });
-    scrollToVerse(currectSelectedVerse)
-  });
+      evt.preventDefault();
+    }
+  }
+
+  onMount(()=>{scrollToVerse(currectSelectedVerse)});
 
 </script>
 
-<div class="wrapper">
+<div on:mousewheel={zoom} class="wrapper" style="font-size: {fontSize}px;">
   {#if $bibleData.error.code === 0}
-    <div id="container" class="verses-viewport">
+    <div  id="container" class="verses-viewport">
       {#each $bibleData.allVerses as verse,i } 
         <div class="wrap-verse">
           <span class="ref-verse">{$shortBooksNames[$bibleData.book]} {$bibleData.chapter}:{i+1}</span>
@@ -61,7 +57,6 @@
   .wrapper {
     width: 100%;
     height: 100%;
-    font-size: x-large;
   }
   .verses-viewport {
     display: flex;
