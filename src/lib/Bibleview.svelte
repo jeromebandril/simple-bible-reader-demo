@@ -1,5 +1,5 @@
 <script>
-  import {openBibles, bibleData, shortBooksNames} from '../store'
+  import {bibleData, shortBooksNames} from '../store'
   
   let currentScale = 1;
   $: selVerse = $bibleData.verse;
@@ -33,7 +33,6 @@
   function moveTruVerses (evt) {
     if(evt.repeat) return;
 
-
     switch (evt.key) {
       case 'ArrowLeft':
         if (selVerse > 1) selVerse -= 1
@@ -45,20 +44,27 @@
     }
   }
 
+  function highlightVerse (evt) {
+    selVerse = parseInt(evt.currentTarget.id);
+  }
 
-  $: {scrollToVerse(selVerse)};
+  $: {scrollToVerse($bibleData.verse)};
 </script>
 
 <svelte:window on:keydown={moveTruVerses}/>
 <div on:mousewheel={zoom} class="wrapper" style="font-size: {fontSize}px;">
   {#if $bibleData.error.code === 0}
     <div  id="container" class="verses-viewport">
-      {#each $bibleData.allVerses as verse,i } 
-        <div id={i+1} class:selected={i+1 === selVerse} class="wrap-verse">
-          <span class="ref-verse">{$shortBooksNames[$bibleData.book]} {$bibleData.chapter}:{i+1}</span>
-          <span class="verse">{verse}</span>
-        </div>
-      {/each}
+      {#if $bibleData.allVerses.length > 0}
+        {#each $bibleData.allVerses as verse,i } 
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
+          <div on:click={highlightVerse} id={i+1} class:selected={i+1 === selVerse} class="wrap-verse">
+            <span class="ref-verse">{$shortBooksNames[$bibleData.book]} {$bibleData.chapter}:{i+1}</span>
+            <span class="verse">{verse}</span>
+          </div>
+        {/each}
+      {/if}
       <div  class="spacer"></div>
     </div>
   {:else}
