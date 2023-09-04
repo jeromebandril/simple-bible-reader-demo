@@ -36,11 +36,11 @@
 
     switch (evt.key) {
       case 'ArrowLeft':
-        selVerse -= 1
+        if (selVerse > 1) selVerse -= 1
         break;
     
       case 'ArrowRight':
-        selVerse += 1;
+        if (selVerse < $bibleData.allVerses.length) selVerse += 1;
         break;
     }
   }
