@@ -37,16 +37,18 @@
 
       const selChapter = parseInt(nums[0], 10);
       const selVerse = parseInt(nums[1], 10);
+      const allVerses = bibleUsed[selBook][selChapter-1];
+
+      if (allVerses === undefined) throw error
 
       bibleData.set({
         book: selBook,
         chapter: selChapter,
         verse: selVerse,
-        allVerses: bibleUsed[selBook][selChapter-1],
+        allVerses: allVerses,
         error: {code: 0,message:""}
       })
     } catch (error) {
-      console.log("error");
       bibleData.set({
         error: {code: 1,message:"Not a valid reference"}
       })
