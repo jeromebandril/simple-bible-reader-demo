@@ -9,5 +9,6 @@ export const bibleData = writable({
   book: 0,
   chapter: 0,
   verse: 0,
-  data: []
+  allVerses: [],
+  error: { code: 0, message: '' }
 });

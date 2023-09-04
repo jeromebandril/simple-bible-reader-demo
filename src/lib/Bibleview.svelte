@@ -1,13 +1,12 @@
 <script>
   import {bibleData, shortBooksNames} from '../store'
   import {onMount} from 'svelte'
-
+  
   let currentScale = 1;
   let currectSelectedVerse = $bibleData.verse;
 
   function scrollToVerse (id) {
   }
-
 
   onMount(()=>{
     // document.addEventListener('wheel', (event) => {
@@ -41,15 +40,21 @@
 </script>
 
 <div class="wrapper">
-  <div id="container" class="verses-viewport">
-    {#each $bibleData.data as verse,i } 
-    <div class="wrap-verse">
-        <span class="ref-verse">{$shortBooksNames[$bibleData.book]} {$bibleData.chapter}:{i+1}</span>
-        <span id={i+1} class="verse">{verse}</span>
+  {#if $bibleData.error.code === 0}
+    <div id="container" class="verses-viewport">
+      {#each $bibleData.allVerses as verse,i } 
+        <div class="wrap-verse">
+          <span class="ref-verse">{$shortBooksNames[$bibleData.book]} {$bibleData.chapter}:{i+1}</span>
+          <span id={i+1} class="verse">{verse}</span>
+        </div>
+      {/each}
+      <div class="spacer"></div>
     </div>
-    {/each}
-    <div class="spacer"></div>
-  </div>
+  {:else}
+    <div>
+      {$bibleData.error.message}
+    </div>
+  {/if} 
 </div>
 
 <style>
