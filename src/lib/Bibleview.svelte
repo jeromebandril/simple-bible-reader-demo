@@ -6,7 +6,6 @@
   let currectSelectedVerse = $bibleData.verse;
 
   function scrollToVerse (id) {
-    location.href = `#${id}`;
   }
 
 
@@ -42,8 +41,7 @@
 </script>
 
 <div class="wrapper">
-  <div class="verses-viewport">
-  <!-- here load bibles verses as span -->
+  <div id="container" class="verses-viewport">
     {#each $bibleData.data as verse,i } 
     <div class="wrap-verse">
         <span class="ref-verse">{$abbreviationBooks[$bibleData.book]} {$bibleData.chapter}:{i+1}</span>

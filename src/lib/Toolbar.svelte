@@ -2,8 +2,10 @@
   import {bible, books, bibleData} from '../store'
 
   let bibleUsed = $bible;
+  console.log("bible:",$bible);
   let bibleBooks = $books;
   let prompt = "";
+
   // TODO: handle errors and exceptions
   function search(prompt) {
     // Divide prompt into two pieces: book reference and chapter/verse
@@ -42,10 +44,10 @@
     const selVerse = parseInt(nums[1], 10);
 
     // console.log(promptBook);
-     console.log(selBook);
+    //  console.log(selBook);
     // console.log(selChapter);
-      console.log("verse",selVerse);
-     console.log(bibleUsed);
+    //   console.log("verse",selVerse);
+    //  console.log(bibleUsed);
  
     bibleData.set({
       book: selBook,
