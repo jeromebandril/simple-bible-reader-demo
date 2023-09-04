@@ -7,7 +7,6 @@
 
   function scrollToVerse (id) {
     const el = document.getElementById(`${id}`)
-    console.log(el);
     if (el!==null) {
       el.scrollIntoView()
     }
@@ -32,10 +31,17 @@
   }
 
   function moveTruVerses (evt) {
-    console.log("ciao");
-    console.log(evt);
-    if (evt.code === 39) {
-      console.log("cuao");
+    if(evt.repeat) return;
+
+
+    switch (evt.key) {
+      case 'ArrowLeft':
+        selVerse -= 1
+        break;
+    
+      case 'ArrowRight':
+        selVerse += 1;
+        break;
     }
   }
 
@@ -43,17 +49,17 @@
   $: {scrollToVerse(selVerse)};
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<svelte:window on:keydown={moveTruVerses}/>
 <div on:mousewheel={zoom} class="wrapper" style="font-size: {fontSize}px;">
   {#if $bibleData.error.code === 0}
-    <div on:keypress={moveTruVerses} id="container" class="verses-viewport">
+    <div  id="container" class="verses-viewport">
       {#each $bibleData.allVerses as verse,i } 
         <div id={i+1} class:selected={i+1 === selVerse} class="wrap-verse">
           <span class="ref-verse">{$shortBooksNames[$bibleData.book]} {$bibleData.chapter}:{i+1}</span>
           <span class="verse">{verse}</span>
         </div>
       {/each}
-      <div class="spacer"></div>
+      <div  class="spacer"></div>
     </div>
   {:else}
     <div>
