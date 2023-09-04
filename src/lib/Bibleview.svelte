@@ -1,5 +1,5 @@
 <script>
-  import {bibleData, abbreviationBooks} from '../store'
+  import {bibleData, shortBooksNames} from '../store'
   import {onMount} from 'svelte'
 
   let currentScale = 1;
@@ -44,7 +44,7 @@
   <div id="container" class="verses-viewport">
     {#each $bibleData.data as verse,i } 
     <div class="wrap-verse">
-        <span class="ref-verse">{$abbreviationBooks[$bibleData.book]} {$bibleData.chapter}:{i+1}</span>
+        <span class="ref-verse">{$shortBooksNames[$bibleData.book]} {$bibleData.chapter}:{i+1}</span>
         <span id={i+1} class="verse">{verse}</span>
     </div>
     {/each}

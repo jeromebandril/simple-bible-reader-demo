@@ -1,9 +1,8 @@
 <script>
-  import {bible, books, bibleData} from '../store'
+  import {openBibles, booksNames, bibleData} from '../store'
 
-  let bibleUsed = $bible;
-  console.log("bible:",$bible);
-  let bibleBooks = $books;
+  let bibleUsed = $openBibles;
+  let bibleBooks = $booksNames;
   let prompt = "";
 
   // TODO: handle errors and exceptions
