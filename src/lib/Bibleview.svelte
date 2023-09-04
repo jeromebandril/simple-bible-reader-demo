@@ -1,13 +1,14 @@
 <script>
   import {bibleData, shortBooksNames} from '../store'
-  import {onMount} from 'svelte'
   
-
   let currentScale = 1;
   $: fontSize = 25 * currentScale;
-  let currectSelectedVerse = $bibleData.verse;
 
   function scrollToVerse (id) {
+    const el = document.getElementById(`${id}`)
+    if (el != null) {
+      el.scrollIntoView()
+    }
   }
 
   function zoom (evt) {
@@ -26,13 +27,10 @@
       } else if (currentScale > 2.0) {
         currentScale = 2.0;
       }
-
-      evt.preventDefault();
     }
   }
 
-  onMount(()=>{scrollToVerse(currectSelectedVerse)});
-
+  $: {scrollToVerse($bibleData.verse)};
 </script>
 
 <div on:mousewheel={zoom} class="wrapper" style="font-size: {fontSize}px;">
