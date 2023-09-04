@@ -8,7 +8,9 @@
   function scrollToVerse (id) {
     const el = document.getElementById(`${id}`)
     if (el!==null) {
-      el.scrollIntoView()
+      el.scrollIntoView({
+        behavior:'auto'
+      })
     }
   }
 
@@ -87,6 +89,7 @@
     height: 100%;
     overflow-y: auto;
     max-height: calc(100vh - 4rem);
+    scroll-behavior: smooth;
   }
   .ref-verse {
     color: blue;
