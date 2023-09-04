@@ -1,17 +1,19 @@
 <script>
+  import { afterUpdate } from 'svelte';
   import {bibleData, shortBooksNames} from '../store'
   
   let currentScale = 1;
   $: selVerse = $bibleData.verse;
   $: fontSize = 25 * currentScale;
 
-  function scrollToVerse (id) {
-    const el = document.getElementById(`${id}`)
-    if (el!==null) {
-      el.scrollIntoView({
-        behavior:'auto'
-      })
+  function scrollToVerse (node) {
+    const update = () => {
+      const item = node.querySelector('.selected');
+      if (item)
+        item.scrollIntoView({ behavior: 'auto' });  
     }
+    update();
+    return {update};
   }
 
   function zoom (evt) {
@@ -50,23 +52,20 @@
     selVerse = parseInt(evt.currentTarget.id);
   }
 
-  $: {scrollToVerse($bibleData.verse)};
 </script>
 
 <svelte:window on:keydown={moveTruVerses}/>
 <div on:mousewheel={zoom} class="wrapper" style="font-size: {fontSize}px;">
   {#if $bibleData.error.code === 0}
-    <div  id="container" class="verses-viewport">
-      {#if $bibleData.allVerses.length > 0}
-        {#each $bibleData.allVerses as verse,i } 
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div on:click={highlightVerse} id={i+1} class:selected={i+1 === selVerse} class="wrap-verse">
-            <span class="ref-verse">{$shortBooksNames[$bibleData.book]} {$bibleData.chapter}:{i+1}</span>
-            <span class="verse">{verse}</span>
-          </div>
-        {/each}
-      {/if}
+    <div use:scrollToVerse={selVerse} id="container" class="verses-viewport">
+      {#each $bibleData.allVerses as verse,i } 
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div on:click={highlightVerse} id={i+1} class:selected={i+1 === selVerse} class="wrap-verse">
+          <span class="ref-verse">{$shortBooksNames[$bibleData.book]} {$bibleData.chapter}:{i+1}</span>
+          <span class="verse">{verse}</span>
+        </div>
+      {/each}
       <div  class="spacer"></div>
     </div>
   {:else}
