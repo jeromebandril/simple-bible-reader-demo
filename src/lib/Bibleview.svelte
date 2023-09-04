@@ -1,12 +1,14 @@
 <script>
-  import {bibleData, shortBooksNames} from '../store'
+  import {openBibles, bibleData, shortBooksNames} from '../store'
   
   let currentScale = 1;
+  $: selVerse = $bibleData.verse;
   $: fontSize = 25 * currentScale;
 
   function scrollToVerse (id) {
     const el = document.getElementById(`${id}`)
-    if (el != null) {
+    console.log(el);
+    if (el!==null) {
       el.scrollIntoView()
     }
   }
@@ -14,7 +16,6 @@
   function zoom (evt) {
     if (evt.ctrlKey) {
       // Calculate the new scale based on scroll direction
-      const zoomableText = document.querySelector('.verse');
       if (evt.deltaY < 0) {
         currentScale += 0.1; // Zoom in when scrolling up
       } else {
@@ -30,16 +31,16 @@
     }
   }
 
-  $: {scrollToVerse($bibleData.verse)};
+  $: {scrollToVerse(selVerse)};
 </script>
 
 <div on:mousewheel={zoom} class="wrapper" style="font-size: {fontSize}px;">
   {#if $bibleData.error.code === 0}
-    <div  id="container" class="verses-viewport">
+    <div id="container" class="verses-viewport">
       {#each $bibleData.allVerses as verse,i } 
-        <div class="wrap-verse">
+        <div id={i+1} class:selected={i+1 === selVerse} class="wrap-verse">
           <span class="ref-verse">{$shortBooksNames[$bibleData.book]} {$bibleData.chapter}:{i+1}</span>
-          <span id={i+1} class="verse">{verse}</span>
+          <span class="verse">{verse}</span>
         </div>
       {/each}
       <div class="spacer"></div>
@@ -59,7 +60,7 @@
   .verses-viewport {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 2rem;
     width: 100%;
     height: 100%;
     overflow-y: auto;
@@ -70,7 +71,7 @@
     font-weight: 600;
   }
 
-  .ref-verse:enabled {
+  .selected {
     color: brown;
   }
 
