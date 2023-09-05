@@ -6,7 +6,8 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div data-tauri-drag-region class="titlebar">
+<div class="titlebar">
+  <div data-tauri-drag-region="" class="drag-area"></div>
   <div class="titlebar-icon-wrapper">
     <img src={smyrnaIcon} height={16} alt="icon">
     <span>Smyrna Bible</span>
@@ -32,6 +33,15 @@
 
 
 <style>
+
+  .drag-area {
+    position: absolute;
+    top: 4px;
+    width: calc(100% - 100px);
+    border-radius: 20px;
+    left: 4px;
+    height: 24px;
+  }
 .titlebar {
   height: 30px;
   background: white;
