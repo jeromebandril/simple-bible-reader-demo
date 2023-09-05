@@ -80,6 +80,7 @@
     width: calc(100% - 10px);
     height: 100%;
     padding: 10px 0 10px 10px;
+    background: var(--tertiary-color);
   }
   .verses-viewport {
     display: flex;

@@ -12,3 +12,4 @@ export const bibleData = writable({
   allVerses: [],
   error: { code: 0, message: '' }
 });
+export const splitCount = writable(0);

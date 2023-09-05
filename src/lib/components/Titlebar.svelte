@@ -44,10 +44,11 @@
   }
 .titlebar {
   height: 30px;
-  background: white;
+  background: var(--secondary-color);
   user-select: none;
   display: flex;
   justify-content: space-between;
+  z-index: 9999;
 }
 
 .titlebar-icon-wrapper {

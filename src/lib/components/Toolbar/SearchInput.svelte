@@ -1,7 +1,6 @@
 <script>
   import {openBibles, booksNames, bibleData} from '../../../store'
 
-
   let bibleUsed = $openBibles;
   let bibleBooks = $booksNames;
   let prompt = "";
@@ -59,8 +58,7 @@
 </script>
 
 <form class="search-input">
-  <label for="">search</label>
-  <input bind:value={prompt} type="text">
+  <input bind:value={prompt} type="text" placeholder="Search">
   <button on:click={search(prompt)}>go</button>
 </form>
   
