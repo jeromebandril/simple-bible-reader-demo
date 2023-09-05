@@ -57,16 +57,25 @@
   }
 </script>
 
-<form class="search-input">
+<form>
   <input bind:value={prompt} type="text" placeholder="Search">
   <button on:click={search(prompt)}>go</button>
 </form>
   
 <style>
-  .search-input {
+  form {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 0.2rem;
+  }
+
+  input {
+    background: var(--tertiary-color);
+    padding-left: 10px;
+    border: none;
+    outline: none;
+    border-radius: var(--border-radius);
+    min-width: 300px;
   }
 </style>

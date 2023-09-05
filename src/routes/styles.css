@@ -2,21 +2,24 @@
 
 /*settings*/
 :root {
-  --font-body: 'Times New Roman', Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+  --font-body: Verdana, Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
     Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   --font-mono: 'Fira Mono', monospace;
-  --primary-color: rgb(51, 51, 51);
-  --secondary-color: rgb(245, 245, 245);
+  --primary-color: rgb(41, 47, 51);
+  --secondary-color: rgb(247, 247, 247);
   --tertiary-color: rgb(255, 255, 255);
-  --color-text: rgb(51, 51, 51);
+  --paper-color: rgb(242, 239, 230);
+  --dark-primary-color: rgb(39, 39, 43);
+  --dark-seconday-color: rgb(44, 44, 49);
+  --border-radius: 12px;
   font-family: var(--font-body);
-  color: var(--color-text);
+  color: var(--primary-color);
 }
 
 body {
   min-height: 100vh;
   margin: 0rem;
-  background-color: var(--color-bg-1);
+  background: var(--color-bg-1);
   overscroll-behavior: none;
   -webkit-user-select: none;
   -ms-user-select: none;
@@ -24,7 +27,7 @@ body {
   overflow-y: hidden;
 }
 
-/* general styling */
+/* consistent styling */
 h1,
 h2,
 p,
@@ -54,8 +57,15 @@ h2 {
   font-size: 1rem;
 }
 
+
 input,
 button {
-  /* font-size: inherit;
-  font-family: inherit; */
+  min-height: 30px;
+  outline: none;
+}
+
+button {
+  background: var(--primary-color);
+  color: var(--tertiary-color);
+  border-radius: var(--border-radius);
 }

@@ -33,7 +33,6 @@
 
 
 <style>
-
   .drag-area {
     position: absolute;
     top: 4px;
@@ -42,46 +41,40 @@
     left: 4px;
     height: 24px;
   }
-.titlebar {
-  height: 30px;
-  background: var(--secondary-color);
-  user-select: none;
-  display: flex;
-  justify-content: space-between;
-  z-index: 9999;
-}
 
-.titlebar-icon-wrapper {
-  height: 32px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2px;
-  margin-left: 10px;
-}
+  .titlebar {
+    height: 30px;
+    background: var(--secondary-color);
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    z-index: 9999;
+  }
 
-.title {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-}
+  .titlebar-icon-wrapper {
+    height: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    margin-left: 10px;
+  }
 
-.titlebar-buttons > div {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  height: 100%;
-}
+  .titlebar-buttons > div {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 100%;
+  }
 
-.titlebar-buttons > div:hover {
-  transition: 300ms;
-  background: lightgray;
-}
+  .titlebar-buttons > div:hover {
+    transition: 300ms;
+    background: lightgray;
+  }
 
-#titlebar-close:hover {
-  transition: 300ms;
-  background: red;
-}
-
+  #titlebar-close:hover {
+    transition: 300ms;
+    background: red;
+  }
 </style>
