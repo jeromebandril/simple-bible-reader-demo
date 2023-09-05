@@ -1,6 +1,6 @@
 <script>
   import { afterUpdate } from 'svelte';
-  import {bibleData, shortBooksNames} from '../store'
+  import {bibleData, shortBooksNames} from '../../store'
   
   let currentScale = 1;
   $: selVerse = $bibleData.verse;

@@ -1,10 +1,9 @@
 <script>
-	import Bibleview from '$lib/Bibleview.svelte';
-  import Toolbar from '$lib/Toolbar.svelte';
-  import Titlebar from '../lib/Titlebar.svelte';
+	import Bibleview from '$lib/components/Bibleview.svelte';
+  import Toolbar from '$lib/components/Toolbar/Toolbar.svelte';
+  import Titlebar from '$lib/components/Titlebar.svelte';
 	import './styles.css';
 </script>
-
 
 <main>
   <Titlebar/>
