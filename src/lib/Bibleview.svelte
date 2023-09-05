@@ -77,8 +77,9 @@
 
 <style>
   .wrapper {
-    width: 100%;
+    width: calc(100% - 10px);
     height: 100%;
+    padding: 10px 0 10px 10px;
   }
   .verses-viewport {
     display: flex;

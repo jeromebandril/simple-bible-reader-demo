@@ -4,6 +4,8 @@
   let bibleUsed = $openBibles;
   let bibleBooks = $booksNames;
   let prompt = "";
+  let isCtrlDown = false;
+  let isLDown = false; 
 
   // TODO: handle errors and exceptions
   function search(prompt) {
@@ -56,8 +58,30 @@
     }
   }
 
+  function onBind(){
+    console.log("yoooooooo");
+    document.querySelector('input').focus();
+  }
+
+  function onKeyPress (evt) {
+    if (evt.repeat) return;
+    switch (evt.key) {
+      case 'Control':
+          isCtrlDown = true;
+        break;
+      case 'l':
+          isLDown = true;
+        break;
+    }
+    if (isCtrlDown && isLDown) {
+      //onBind();
+    }
+
+  }
+
 </script>
 
+<svelte:window on:keydown={onKeyPress}/>
 <div class="toolbar">
   <form class="search-input">
     <label for="">search</label>
@@ -73,10 +97,11 @@
     display: flex;
     flex-direction: row;
     height: 4rem;
-    width: 100%;
+    width: calc(100% -20px);
     align-items: center;
     top: 0;
     background: white;
+    padding: 0 10px;
   }
   .search-input {
     display: flex;

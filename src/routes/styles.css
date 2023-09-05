@@ -21,7 +21,6 @@ body {
   margin: 0rem;
   background-attachment: fixed;
   background-color: var(--color-bg-1);
-
   overscroll-behavior: none;
   -webkit-user-select: none;
   -ms-user-select: none;
