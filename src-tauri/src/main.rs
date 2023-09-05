@@ -3,6 +3,8 @@
 
 use std::fs::File;
 use std::io::Read;
+use tauri::Manager;
+use window_shadows::set_shadow;
 
 // create the error type that represents all errors possible in our program
 #[derive(Debug, thiserror::Error)]
@@ -44,7 +46,15 @@ fn load_bible(content: &str) -> Result<BibleData, Error> {
 }
 
 fn main() {
+
   tauri::Builder::default()
+    .setup(|app| {
+      let window = app.get_window("main").unwrap();
+      #[cfg(any(windows, target_os = "windows"))]
+      set_shadow(&window, true).unwrap();
+
+      Ok(())
+    })
     .invoke_handler(tauri::generate_handler![read_bible_source,load_bible])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
