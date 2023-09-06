@@ -18,7 +18,7 @@
 
       const mySearchResult: Record<string,any> = {
         'string': () => {
-          for (let b = 0; b < bibleUsed.length; b++) {
+          mainloop: for (let b = 0; b < bibleUsed.length; b++) {
             for (let c = 0; c < bibleUsed[b].length; c++) {
               for (let v = 0; v < bibleUsed[b][c].length; v++) {
                 let verse: string = bibleUsed[b][c][v];
@@ -29,6 +29,7 @@
                     verse: v
                   })
                 }
+                if (results.length === 30) break mainloop;
               }
             }
           }
@@ -100,7 +101,6 @@
     let method : string = 'reference'
     if (prompt.startsWith('$')) {
       method = 'string'
-      console.log("setted");
       
     }
     prompt = prompt.slice(1);
