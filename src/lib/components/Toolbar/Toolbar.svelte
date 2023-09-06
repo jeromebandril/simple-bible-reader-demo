@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import BibleChooser from './BibleChooser.svelte';
   import SearchInput from './SearchInput.svelte';
   import {splitCount} from '../../../store' 
@@ -8,10 +8,10 @@
 
   function onBind(){
     console.log("yoooooooo");
-    document.querySelector('input').focus();
+    //document.querySelector('input').focus();
   }
 
-  function onKeyPress (evt) {
+  function onKeyPress (evt: KeyboardEvent) {
     if (evt.repeat) return;
     switch (evt.key) {
       case 'Control':

@@ -1,12 +1,11 @@
-<script>
-  import { afterUpdate } from 'svelte';
+<script lang="ts">
   import {bibleData, shortBooksNames} from '../../store'
   
   let currentScale = 1;
   $: selVerse = $bibleData.verse;
   $: fontSize = 25 * currentScale;
 
-  function scrollToVerse (node) {
+  function scrollToVerse (node: Element, id: number) {
     const update = () => {
       const item = node.querySelector('.selected');
       if (item)
@@ -16,7 +15,7 @@
     return {update};
   }
 
-  function zoom (evt) {
+  function zoom (evt: WheelEvent) {
     if (evt.ctrlKey) {
       // Calculate the new scale based on scroll direction
       if (evt.deltaY < 0) {
@@ -34,7 +33,7 @@
     }
   }
 
-  function moveTruVerses (evt) {
+  function moveTruVerses (evt: KeyboardEvent) {
     if(evt.repeat) return;
 
     switch (evt.key) {
@@ -48,20 +47,20 @@
     }
   }
 
-  function highlightVerse (evt) {
-    selVerse = parseInt(evt.currentTarget.id);
+  function highlightVerse (evt: MouseEvent) {
+    const element = evt.currentTarget as HTMLDivElement;
+    selVerse = parseInt(element.id);
   }
-
 </script>
 
 <svelte:window on:keydown={moveTruVerses}/>
-<div on:mousewheel={zoom} class="wrapper" style="font-size: {fontSize}px;">
+<div on:wheel={zoom} class="wrapper" style="font-size: {fontSize}px;">
   {#if $bibleData.error.code === 0}
     <div use:scrollToVerse={$bibleData.verse} id="container" class="verses-viewport">
       {#each $bibleData.allVerses as verse,i } 
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <div on:click={highlightVerse} id={i+1} class:selected={i+1 === selVerse} class="wrap-verse">
+        <div on:click={highlightVerse} id={String(i+1)} class:selected={i+1 === selVerse} class="wrap-verse">
           <span class="ref-verse">{$shortBooksNames[$bibleData.book]} {$bibleData.chapter}:{i+1}</span>
           <span class="verse">{verse}</span>
         </div>

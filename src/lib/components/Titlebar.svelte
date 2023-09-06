@@ -1,7 +1,6 @@
-<script>
+<script lang="ts">
   import { appWindow  } from "@tauri-apps/api/window";
   import smyrnaIcon from "$lib/images/32x32.png"
-
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->

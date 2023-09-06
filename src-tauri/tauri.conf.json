@@ -4,30 +4,47 @@
     "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm run dev",
     "devPath": "http://localhost:5173",
-    "distDir": "../public"
+    "distDir": "../build"
   },
   "package": {
-    "productName": "Smyrna Bible",
+    "productName": "The Smyrna Bible",
     "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {
       "all": false,
-      "fs": {
-        "readFile": true,
-        "readDir": true,
-        "scope": ["$RESOURCE/**"]
-      },
-      "path": {
-        "all": true
-      },
       "window": {
+        "all": false,
+        "center": false,
         "close": true,
+        "create": false,
+        "hide": false,
         "maximize": true,
         "minimize": true,
+        "print": false,
+        "requestUserAttention": false,
+        "setAlwaysOnTop": false,
+        "setClosable": false,
+        "setContentProtected": false,
+        "setCursorGrab": false,
+        "setCursorIcon": false,
+        "setCursorPosition": false,
+        "setCursorVisible": false,
         "setDecorations": true,
         "setFocus": true,
+        "setFullscreen": false,
+        "setIcon": false,
+        "setIgnoreCursorEvents": false,
+        "setMaxSize": false,
+        "setMaximizable": false,
+        "setMinSize": false,
+        "setMinimizable": false,
+        "setPosition": false,
+        "setResizable": false,
         "setSize": true,
+        "setSkipTaskbar": false,
+        "setTitle": false,
+        "show": false,
         "startDragging": true,
         "unmaximize": true,
         "unminimize": true
@@ -72,7 +89,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "Smyrna Bible",
+        "title": "The Smyrna Bible",
         "width": 800
       }
     ]

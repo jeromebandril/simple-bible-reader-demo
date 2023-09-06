@@ -6,7 +6,6 @@ use std::io::Read;
 use tauri::Manager;
 use window_shadows::set_shadow;
 
-// create the error type that represents all errors possible in our program
 #[derive(Debug, thiserror::Error)]
 enum Error {
   #[error(transparent)]
@@ -26,27 +25,16 @@ impl serde::Serialize for Error {
   }
 }
 
-#[derive(serde::Serialize,serde::Deserialize)]
-struct BibleData { 
-  data: Vec<Vec<Vec<String>>>,
-}
-
 #[tauri::command]
-fn read_bible_source(file_path: &str) -> Result<String, Error> {
+fn read_file(file_path: &str) -> Result<String, Error> {
   let mut file = File::open(file_path)?;
   let mut content = String::new();  
   file.read_to_string(&mut content)?;
   Ok(content)
 }
 
-#[tauri::command]
-fn load_bible(content: &str) -> Result<BibleData, Error> {
-  let parsed_data: BibleData = serde_json::from_str(content)?;
-  Ok(parsed_data)
-}
 
 fn main() {
-
   tauri::Builder::default()
     .setup(|app| {
       let window = app.get_window("main").unwrap();
@@ -55,7 +43,7 @@ fn main() {
 
       Ok(())
     })
-    .invoke_handler(tauri::generate_handler![read_bible_source,load_bible])
+    .invoke_handler(tauri::generate_handler![read_file])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
