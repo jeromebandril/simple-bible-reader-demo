@@ -11,7 +11,7 @@
       // VARIABLE //
       const resultBuild = {
         results: [] as BibleRef[],
-        flag: 0 as number,
+        selectedVerse: 0,
         status: {} as MessageCode
       } 
 
@@ -31,7 +31,6 @@
             }
           }
         }
-        resultBuild.flag = 0;
         resultBuild.status = {
           code: 0,
           message: "ok"
@@ -73,14 +72,17 @@
         const selVerse = parseInt(nums[1], 10);
 
         //construct response
-        resultBuild.results.push({
-          book: selBook,
-          chapter: selChapter,
-          verse: selVerse,
-        })
+        resultBuild.selectedVerse = selVerse;
         resultBuild.status = {
           code: 0,
           message: "ok"
+        }
+        for (let i = 0; i < bibleUsed[selBook][selChapter].length; i++) {
+          resultBuild.results.push({
+            book: selBook,
+            chapter: selChapter,
+            verse: i,
+          })
         }
       }
 
