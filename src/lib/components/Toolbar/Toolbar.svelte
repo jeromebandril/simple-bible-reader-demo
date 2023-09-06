@@ -7,7 +7,6 @@
   let isLDown = false; 
 
   function onBind(){
-    console.log("yoooooooo");
     //document.querySelector('input').focus();
   }
 
