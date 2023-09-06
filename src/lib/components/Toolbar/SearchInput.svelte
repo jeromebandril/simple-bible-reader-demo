@@ -68,9 +68,12 @@
               break;
             }
           }
-          const selChapter = parseInt(nums[0], 10);
-          const selVerse = parseInt(nums[1], 10);
-          //construct response
+
+          const selChapter = parseInt(nums[0], 10) - 1;
+          const selVerse = parseInt(nums[1], 10) - 1; 
+
+          console.log(selVerse);
+
           selectedVerse = selVerse;
           status = {
             code: 0,
@@ -86,7 +89,7 @@
           return {results,selectedVerse,status}
         }
       }
-      
+
       searchResult.set(mySearchResult[method]());
     } catch (error) {
       console.log(error);

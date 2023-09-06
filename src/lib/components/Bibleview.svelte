@@ -3,7 +3,7 @@
   
   $: currentBible = $openBibles.kjv;
   $: results = $searchResult.results
-  let selVerse = 1;
+  $: selectedVerse = $searchResult.selectedVerse;
   let currentScale = 1;
   $: fontSize = 25 * currentScale;
 
@@ -40,18 +40,18 @@
 
     switch (evt.key) {
       case 'ArrowLeft':
-        if (selVerse > 1) selVerse -= 1
+        if (selectedVerse > 1) selectedVerse -= 1
         break;
     
       case 'ArrowRight':
-        if (selVerse < results.length) selVerse += 1;
+        if (selectedVerse < results.length) selectedVerse += 1;
         break;
     }
   }
 
   function highlightVerse (evt: MouseEvent) {
     const element = evt.currentTarget as HTMLDivElement;
-    selVerse = parseInt(element.id);
+    selectedVerse = parseInt(element.id);
   }
 
 </script>
@@ -60,12 +60,12 @@
 <svelte:window on:keydown={moveTruVerses}/>
 <div on:wheel={zoom} class="wrapper" style="font-size: {fontSize}px;">
   {#if $searchResult.status.code === 0}
-    <div use:scrollToVerse={results[0].verse} id="container" class="verses-viewport">
-      {#each results as res,i} 
+    <div use:scrollToVerse={$searchResult.selectedVerse} id="container" class="verses-viewport">
+      {#each results as res, i} 
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <div on:click={highlightVerse} id={String(i+1)} class:selected={i+1 === selVerse} class="wrap-verse">
-          <span class="ref-verse">{$shortBooksNames[res.book]} {res.chapter}:{i+1}</span>
+        <div on:click={highlightVerse} id={String(i)} class:selected={i === selectedVerse} class="wrap-verse">
+          <span class="ref-verse">{$shortBooksNames[res.book]} {res.chapter+1}:{res.verse+1}</span>
           <span class="verse">{currentBible[res.book][res.chapter][res.verse]}</span>
         </div>
       {/each}
