@@ -17,7 +17,7 @@
     return {update};
   }
 
-  function zoom (evt: WheelEvent) {
+  function zoom (evt: WheelEvent) { 
     if (evt.ctrlKey) {
       // Calculate the new scale based on scroll direction
       if (evt.deltaY < 0) {
