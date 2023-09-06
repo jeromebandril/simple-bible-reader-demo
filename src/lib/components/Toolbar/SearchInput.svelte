@@ -72,7 +72,7 @@
           const selChapter = parseInt(nums[0], 10) - 1;
           const selVerse = parseInt(nums[1], 10) - 1; 
 
-          console.log(selVerse);
+          console.log("why?");
 
           selectedVerse = selVerse;
           status = {
@@ -95,11 +95,15 @@
       console.log(error);
     }
   }
-
+  
   function process(prompt: string): void {
     let method : string = 'reference'
+    if (prompt.startsWith('$')) {
+      method = 'string'
+      console.log("setted");
+      
+    }
     prompt = prompt.slice(1);
-    if (prompt.startsWith('$')) method = 'string'
     searchBy(method,prompt)
   } 
 </script>
