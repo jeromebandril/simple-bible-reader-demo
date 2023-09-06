@@ -1,67 +1,107 @@
 <script lang="ts">
-  import {openBibles, booksNames, bibleData} from '../../../store'
+  import {openBibles, booksNames, searchResults} from '../../../store'
+  import type {BibleRef, MessageCode} from '../../../myInterfaces'
 
-  let bibleUsed = $openBibles;
+  let bibleUsed = $openBibles.kjv;
   let bibleBooks = $booksNames;
-  let prompt = "";
+  let prompt: string;
 
-  // TODO: handle errors and exceptions
-  function search(prompt: string) {
+  function searchBy(method: string,prompt: string) : void{
     try {
-      // Divide prompt into two pieces: book reference and chapter/verse
-      const matchResult = prompt.match(/(.*[a-zA-Z]\s*)(.*)/);
-      const matchBook = matchResult && matchResult[1];
-      const matchChapVer = matchResult && matchResult[2];
-      if (matchResult === null || matchBook === null || matchChapVer === null) throw Error;
-      ;
+      // VARIABLE //
+      const resultBuild = {
+        results: [] as BibleRef[],
+        flag: 0 as number,
+        status: {} as MessageCode
+      } 
 
-      // Parse the prompt and get book, chapter, verse
-      let promptBook = matchBook.replace(/\s/g, '');
-      const nums: string[] = matchChapVer.match(/\d+/g) || [];
-      // Construct the prompt book better
-      if (/\d/.test(promptBook)) {
-        const firstPart = promptBook.match(/(\d+)(\w+)?|(\w+)/);
-        if (firstPart === null) throw Error;
-        promptBook = (firstPart[1] || '') + ' ' + (firstPart[2] || '');
-      } else {
-        promptBook = (promptBook.match(/[a-zA-Z]+/) || [''])[0];
+      // $: search for matching string
+      if (method === 'string') {
+        for (let b = 0; b < bibleUsed.length; b++) {
+          for (let c = 0; c < bibleUsed[b].length; c++) {
+            for (let v = 0; v < bibleUsed[b][c].length; v++) {
+              let verse: string = bibleUsed[b][c][v];
+              if (verse.toLowerCase().includes(prompt.toLowerCase())) {
+                resultBuild.results.push({
+                  book: b,
+                  chapter: c,
+                  verse: v
+                })
+              }
+            }
+          }
+        }
+        resultBuild.flag = 0;
+        resultBuild.status = {
+          code: 0,
+          message: "ok"
+        } 
       }
-      // If verse is not specified, go to verse 1
-      if (nums.length < 2) {
-        nums.push('1');
-      }
-      // Get index of the book
-      let selBook :number = 0;
-      for (let i = 0; i < bibleBooks.length; i++) {
-        if (bibleBooks[i].toLowerCase().includes(promptBook.toLowerCase())) {
-          selBook = i;
-          break;
+
+      //default: search for scripture reference
+      if (method === 'reference') {
+        // Divide prompt into two pieces: book reference and chapter/verse
+        const matchResult = prompt.match(/(.*[a-zA-Z]\s*)(.*)/);
+        const matchBook = matchResult && matchResult[1];
+        const matchChapVer = matchResult && matchResult[2];
+        if (matchResult === null || matchBook === null || matchChapVer === null) throw Error;
+        // Parse the prompt and get book, chapter, verse
+        let promptBook = matchBook.replace(/\s/g, '');
+        const nums: string[] = matchChapVer.match(/\d+/g) || [];
+        // Construct the prompt book better
+        if (/\d/.test(promptBook)) {
+          const firstPart = promptBook.match(/(\d+)(\w+)?|(\w+)/);
+          if (firstPart === null) throw Error;
+          promptBook = (firstPart[1] || '') + ' ' + (firstPart[2] || '');
+        } else {
+          promptBook = (promptBook.match(/[a-zA-Z]+/) || [''])[0];
+        }
+        // If verse is not specified, go to verse 1
+        if (nums.length < 2) {
+          nums.push('1');
+        }
+        // Get index of the book
+        let selBook: number = 0;
+        for (let i = 0; i < bibleBooks.length; i++) {
+          if (bibleBooks[i].toLowerCase().includes(promptBook.toLowerCase())) {
+            selBook = i;
+            break;
+          }
+        }
+
+        const selChapter = parseInt(nums[0], 10);
+        const selVerse = parseInt(nums[1], 10);
+
+        //construct response
+        resultBuild.results.push({
+          book: selBook,
+          chapter: selChapter,
+          verse: selVerse,
+        })
+        resultBuild.status = {
+          code: 0,
+          message: "ok"
         }
       }
 
-      const selChapter = parseInt(nums[0], 10);
-      const selVerse = parseInt(nums[1], 10);
-      const allVerses = bibleUsed[selBook][selChapter-1];
-
-      if (allVerses === undefined) throw Error;
-      if (allVerses[selVerse-1] === undefined) throw Error;
-
-      bibleData.set({
-        book: selBook,
-        chapter: selChapter,
-        verse: selVerse,
-        allVerses: allVerses,
-        error: {code: 0,message:""}
-      })
+      searchResults.set(resultBuild);
     } catch (error) {
       console.log(error);
     }
   }
+
+
+  function process(prompt: string): void {
+    let method : string = 'reference'
+    prompt = prompt.slice(1);
+    if (prompt.startsWith('$')) method = 'string'
+    searchBy(method,prompt)
+  } 
 </script>
 
 <form>
   <input bind:value={prompt} type="text" placeholder="Search">
-  <button on:click={()=>{search(prompt)}}>go</button>
+  <button on:click={()=>{process(prompt)}}>go</button>
 </form>
   
 <style>
