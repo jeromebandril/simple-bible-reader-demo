@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {openBibles, booksNames, searchResults} from '../../../store'
+  import {openBibles, booksNames, searchResult} from '../../../store'
   import type {BibleRef, MessageCode} from '../../../myInterfaces'
 
   let bibleUsed = $openBibles.kjv;
@@ -84,12 +84,11 @@
         }
       }
 
-      searchResults.set(resultBuild);
+      searchResult.set(resultBuild);
     } catch (error) {
       console.log(error);
     }
   }
-
 
   function process(prompt: string): void {
     let method : string = 'reference'

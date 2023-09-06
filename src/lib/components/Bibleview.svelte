@@ -1,8 +1,7 @@
 <script lang="ts">
-  import {bibleData, shortBooksNames} from '../../store'
+  import {searchResult ,shortBooksNames} from '../../store'
   
   let currentScale = 1;
-  $: selVerse = $bibleData.verse;
   $: fontSize = 25 * currentScale;
 
   function scrollToVerse (node: Element, id: number) {
@@ -51,6 +50,7 @@
     const element = evt.currentTarget as HTMLDivElement;
     selVerse = parseInt(element.id);
   }
+
 </script>
 
 <svelte:window on:keydown={moveTruVerses}/>
