@@ -9,11 +9,12 @@
   function searchBy(method: string,prompt: string) : void{
     try {
       // VARIABLE //
-      const resultBuild = {
-        results: [] as BibleRef[],
-        selectedVerse: 0,
-        status: {} as MessageCode
-      } 
+      let results: BibleRef[] = [];
+      let selectedVerse: number = 0;
+      let status: MessageCode = {
+        code: 0,
+        message: ""
+      };
 
       // $: search for matching string
       if (method === 'string') {
@@ -22,7 +23,7 @@
             for (let v = 0; v < bibleUsed[b][c].length; v++) {
               let verse: string = bibleUsed[b][c][v];
               if (verse.toLowerCase().includes(prompt.toLowerCase())) {
-                resultBuild.results.push({
+                results.push({
                   book: b,
                   chapter: c,
                   verse: v
@@ -31,7 +32,7 @@
             }
           }
         }
-        resultBuild.status = {
+        status = {
           code: 0,
           message: "ok"
         } 
@@ -67,18 +68,16 @@
             break;
           }
         }
-
         const selChapter = parseInt(nums[0], 10);
         const selVerse = parseInt(nums[1], 10);
-
         //construct response
-        resultBuild.selectedVerse = selVerse + 1;
-        resultBuild.status = {
+        selectedVerse = selVerse;
+        status = {
           code: 0,
           message: "ok"
         }
         for (let i = 0; i < bibleUsed[selBook][selChapter].length; i++) {
-          resultBuild.results.push({
+          results.push({
             book: selBook,
             chapter: selChapter,
             verse: i,
@@ -86,7 +85,11 @@
         }
       }
 
-      searchResult.set(resultBuild);
+      searchResult.set({
+        results: results,
+        selectedVerse: selectedVerse,
+        status: status
+      });
     } catch (error) {
       console.log(error);
     }
