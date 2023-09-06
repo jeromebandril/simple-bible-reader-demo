@@ -2,7 +2,8 @@ import { invoke } from '@tauri-apps/api/tauri';
 import { writable, readable } from 'svelte/store';
 import type { BibleRef, MessageCode } from './myInterfaces';
 
-const resourcePath: string = '\\smyrna.bible.v2\\src-tauri\\assets\\data\\kjv-english.json';
+const resourcePath: string = '\\smyrna\\src-tauri\\assets\\data\\bibles\\kjv-english.json';
+
 export const openBibles = readable({
   kjv: JSON.parse(await invoke('read_file', { filePath: resourcePath }))
 });

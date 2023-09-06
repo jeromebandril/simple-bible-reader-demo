@@ -1,6 +1,9 @@
 <script lang="ts">
-  import {searchResult ,shortBooksNames} from '../../store'
+  import {openBibles,searchResult, shortBooksNames} from '../../store'
   
+  $: currentBible = $openBibles.kjv;
+  $: results = $searchResult.results
+  let selVerse = 1;
   let currentScale = 1;
   $: fontSize = 25 * currentScale;
 
@@ -41,7 +44,7 @@
         break;
     
       case 'ArrowRight':
-        if (selVerse < $bibleData.allVerses.length) selVerse += 1;
+        if (selVerse < results.length) selVerse += 1;
         break;
     }
   }
@@ -53,23 +56,24 @@
 
 </script>
 
+<div></div>
 <svelte:window on:keydown={moveTruVerses}/>
 <div on:wheel={zoom} class="wrapper" style="font-size: {fontSize}px;">
-  {#if $bibleData.error.code === 0}
-    <div use:scrollToVerse={$bibleData.verse} id="container" class="verses-viewport">
-      {#each $bibleData.allVerses as verse,i } 
+  {#if $searchResult.status.code === 0}
+    <div use:scrollToVerse={results[0].verse} id="container" class="verses-viewport">
+      {#each results as res,i} 
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div on:click={highlightVerse} id={String(i+1)} class:selected={i+1 === selVerse} class="wrap-verse">
-          <span class="ref-verse">{$shortBooksNames[$bibleData.book]} {$bibleData.chapter}:{i+1}</span>
-          <span class="verse">{verse}</span>
+          <span class="ref-verse">{$shortBooksNames[res.book]} {res.chapter}:{i+1}</span>
+          <span class="verse">{currentBible[res.book][res.chapter][res.verse]}</span>
         </div>
       {/each}
       <div  class="spacer"></div>
     </div>
   {:else}
     <div>
-      {$bibleData.error.message}
+      {$searchResult.status.message}
     </div>
   {/if} 
 </div>

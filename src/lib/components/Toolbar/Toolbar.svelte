@@ -22,7 +22,7 @@
         break;
     }
     if (isCtrlDown && isLDown) {
-      //onBind();
+      onBind();
     }
   }
 

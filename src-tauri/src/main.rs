@@ -40,7 +40,6 @@ fn main() {
       let window = app.get_window("main").unwrap();
       #[cfg(any(windows, target_os = "windows"))]
       set_shadow(&window, true).unwrap();
-
       Ok(())
     })
     .invoke_handler(tauri::generate_handler![read_file])

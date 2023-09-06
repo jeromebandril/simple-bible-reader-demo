@@ -3,7 +3,6 @@
   import Toolbar from '$lib/components/Toolbar/Toolbar.svelte';
   import Titlebar from '$lib/components/Titlebar.svelte';
 	import './styles.css';
-  import {splitCount} from '../store'
 </script>
 
 <main>
@@ -11,9 +10,6 @@
   <Toolbar/>
   <div class="split-screen">
     <Bibleview/>
-    {#each {length: $splitCount} as _}
-      <Bibleview/>
-    {/each}
   </div>
 </main>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {openBibles, booksNames, searchResult} from '../../../store'
+  import {openBibles,booksNames, searchResult} from '../../../store'
   import type {BibleRef, MessageCode} from '../../../myInterfaces'
 
   let bibleUsed = $openBibles.kjv;
@@ -72,7 +72,7 @@
         const selVerse = parseInt(nums[1], 10);
 
         //construct response
-        resultBuild.selectedVerse = selVerse;
+        resultBuild.selectedVerse = selVerse + 1;
         resultBuild.status = {
           code: 0,
           message: "ok"
