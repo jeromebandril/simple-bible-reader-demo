@@ -6,93 +6,127 @@
   let bibleBooks = $booksNames;
   let prompt: string;
 
+
+  /**
+   * 
+   * @param method
+   * @param prompt
+   * @returns void
+   * @description 
+   * search for bible references that matches the input "prompt". 
+   * The searching can be process in two ways based on "method" value:
+   * - string: accept a sentence as prompt
+   * - reference: accept book, chapter and verse.
+   * 
+   * Each method builds a result matching "searchResult" data structure,
+   * then "searchResult" value is set to that value.
+   * The book, chapter and verse starts from 0.
+   */
   function searchBy(method: string, prompt: string) : void{
     try {
       // DATA //
-      let results: BibleRef[] = [];
-      let selectedVerse: number = 0;
-      let status: MessageCode = {
-        code: 0,
-        message: ""
-      };
+      let thisSearchResult = {
+        results: [] as BibleRef[],
+        selectedVerse: 0 as number,
+        status: {
+          code: 0,
+          message: ""
+        } as MessageCode
+      }
 
       const mySearchResult: Record<string,any> = {
         'string': () => {
+          const temp: BibleRef[] = [];
           mainloop: for (let b = 0; b < bibleUsed.length; b++) {
             for (let c = 0; c < bibleUsed[b].length; c++) {
               for (let v = 0; v < bibleUsed[b][c].length; v++) {
                 let verse: string = bibleUsed[b][c][v];
                 if (verse.toLowerCase().includes(prompt.toLowerCase())) {
-                  results.push({
+                  temp.push({
                     book: b,
                     chapter: c,
                     verse: v
                   })
                 }
-                if (results.length === 30) break mainloop;
+                if (temp.length === 30) break mainloop;
               }
             }
           }
-          status = {
-            code: 0,
-            message: "ok"
+          //build response
+          return thisSearchResult = {
+            results: temp,
+            selectedVerse: 0,
+            status: {
+              code: 0,
+              message: "ok"
+            }
           }
-          return {results,selectedVerse,status} 
         },
 
         'reference' : () => {
-          // Divide prompt into two pieces: book reference and chapter/verse
-          const matchResult = prompt.match(/(.*[a-zA-Z]\s*)(.*)/);
-          const matchBook = matchResult && matchResult[1];
-          const matchChapVer = matchResult && matchResult[2];
-          if (matchResult === null || matchBook === null || matchChapVer === null) throw Error;
-          // Parse the prompt and get book, chapter, verse
-          let promptBook = matchBook.replace(/\s/g, '');
-          const nums: string[] = matchChapVer.match(/\d+/g) || [];
+          let resultBook: number;
+          let resultChapter: number;
+          let resultVerse: number;
+
+          // Divide prompt into two: book reference and chapter+verse
+          const rawResult = prompt.match(/(.*[a-zA-Z]\s*)(.*)/);
+          const rawBook = rawResult && rawResult[1];
+          const rawChapVer = rawResult && rawResult[2];
+          
+          if (rawBook === null || rawChapVer === null) throw Error('no characters or too short');
+          
+          // Clean string and distinguish book, chapter and verse
+          const cleanedBook = rawBook.replace(/[\s\W]/g, ''); //remove all spaces and special characters 
+
           // Construct the prompt book better
-          if (/\d/.test(promptBook)) {
-            const firstPart = promptBook.match(/(\d+)(\w+)?|(\w+)/);
-            if (firstPart === null) throw Error;
-            promptBook = (firstPart[1] || '') + ' ' + (firstPart[2] || '');
-          } else {
-            promptBook = (promptBook.match(/[a-zA-Z]+/) || [''])[0];
-          }
+          // if book contains digits (e.g. 1 john, 1 peter, 1 samuel etc...) add space in between
+          const promptBook = (/\d/.test(cleanedBook)) ? cleanedBook.replace(/(\d)([a-zA-Z])/g, '$1 $2') : cleanedBook;
+          const promptDigits: string[] | null= rawChapVer.match(/\d+/g) || []; //collect all digits into array
           // If verse is not specified, go to verse 1
-          if (nums.length < 2) {
-            nums.push('1');
-          }
+          if (promptDigits.length < 2) promptDigits.push('1');
+
           // Get index of the book
-          let selBook: number = 0;
-          for (let i = 0; i < bibleBooks.length; i++) {
+          let isMatch = false;
+          let i = 0;
+          while (!isMatch && i < bibleBooks.length) {
             if (bibleBooks[i].toLowerCase().includes(promptBook.toLowerCase())) {
-              selBook = i;
-              break;
+              isMatch = !isMatch;
+            } else {
+              i++;
             }
           }
 
-          const selChapter = parseInt(nums[0], 10) - 1;
-          const selVerse = parseInt(nums[1], 10) - 1; 
+          // final results
+          resultBook = i;
+          resultChapter = parseInt(promptDigits[0], 10) - 1;
+          resultVerse = parseInt(promptDigits[1], 10) - 1; 
 
-          console.log("why?");
-
-          selectedVerse = selVerse;
-          status = {
-            code: 0,
-            message: "ok"
-          }
-          for (let i = 0; i < bibleUsed[selBook][selChapter].length; i++) {
-            results.push({
-              book: selBook,
-              chapter: selChapter,
+          // get all verses of the chapter
+          const temp: BibleRef[] = [];
+          for (let i = 0; i < bibleUsed[resultBook][resultChapter].length; i++) {
+            temp.push({
+              book: resultBook,
+              chapter: resultChapter,
               verse: i,
             })
           }
-          return {results,selectedVerse,status}
+
+          // build response
+          return thisSearchResult = {
+            results: temp,
+            selectedVerse: resultVerse,
+            status: {
+              code: 0,
+              message: "ok"
+            }
+          }
         }
       }
 
       searchResult.set(mySearchResult[method]());
-    } catch (error) {
+    } catch (error: any) {
+      console.log("arcipicchia");
+      
       console.log(error);
     }
   }
@@ -100,10 +134,9 @@
   function process(prompt: string): void {
     let method : string = 'reference'
     if (prompt.startsWith('$')) {
+      prompt = prompt.slice(1);
       method = 'string'
-      
-    }
-    prompt = prompt.slice(1);
+    } 
     searchBy(method,prompt)
   } 
 </script>
