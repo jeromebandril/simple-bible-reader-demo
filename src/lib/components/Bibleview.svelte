@@ -40,11 +40,11 @@
 
     switch (evt.key) {
       case 'ArrowLeft':
-        if (selectedVerse > 1) selectedVerse -= 1
+        if (selectedVerse > 0) selectedVerse -= 1
         break;
     
       case 'ArrowRight':
-        if (selectedVerse < results.length) selectedVerse += 1;
+        if (selectedVerse < results.length - 1) selectedVerse += 1;
         break;
     }
   }
