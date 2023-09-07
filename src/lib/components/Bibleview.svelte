@@ -1,11 +1,17 @@
 <script lang="ts">
   import {openBibles,searchResult, shortBooksNames} from '../../store'
   
+  // OPTIONS //
+  const MAX_ZOOM_OUT: number = 0.5;
+  const MAX_ZOOM_IN: number = 4;
+  const DEFAULT_FONT_SIZE: number = 25;
+  const DEFAULT_SCALE: number = 1;
+
+  let currentScale = DEFAULT_SCALE;
+  $: fontSize = DEFAULT_FONT_SIZE * currentScale;
   $: currentBible = $openBibles.kjv;
   $: results = $searchResult.results
   $: selectedVerse = $searchResult.selectedVerse;
-  let currentScale = 1;
-  $: fontSize = 25 * currentScale;
 
   function scrollToVerse (node: Element, id: number) {
     const update = () => {
@@ -27,10 +33,10 @@
       }
 
       // Limit the scale to a specific range if needed
-      if (currentScale < 0.5) {
-        currentScale = 0.5;
-      } else if (currentScale > 2.0) {
-        currentScale = 2.0;
+      if (currentScale < MAX_ZOOM_OUT) {
+        currentScale = MAX_ZOOM_OUT;
+      } else if (currentScale > MAX_ZOOM_IN) {
+        currentScale = MAX_ZOOM_IN;
       }
     }
   }
