@@ -140,8 +140,16 @@
     } 
     searchBy(method,prompt)
   } 
+
+  function activateShortcuts (evt: KeyboardEvent) {
+    if (evt.repeat) return;
+    if (evt.ctrlKey && evt.key === 'l') {
+      document.querySelector('input')!.focus();
+    }
+  }
 </script>
 
+<svelte:window on:keydown={activateShortcuts}/>
 <form>
   <input bind:value={prompt} type="text" placeholder="Search">
   <button on:click={()=>{process(prompt)}}>go</button>
