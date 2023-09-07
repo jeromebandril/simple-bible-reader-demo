@@ -37,6 +37,8 @@
       const mySearchResult: Record<string,any> = {
         'string': () => {
           const temp: BibleRef[] = [];
+          prompt = prompt.replace(/\s+/g,' '); //replace all unecessary spaces (maybe typos)
+          
           mainloop: for (let b = 0; b < bibleUsed.length; b++) {
             for (let c = 0; c < bibleUsed[b].length; c++) {
               for (let v = 0; v < bibleUsed[b][c].length; v++) {
@@ -126,7 +128,6 @@
       searchResult.set(mySearchResult[method]());
     } catch (error: any) {
       console.log("arcipicchia");
-      
       console.log(error);
     }
   }
