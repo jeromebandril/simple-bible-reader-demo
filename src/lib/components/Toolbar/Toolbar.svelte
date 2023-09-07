@@ -3,34 +3,12 @@
   import SearchInput from './SearchInput.svelte';
   import {splitCount} from '../../../store' 
 
-  let isCtrlDown = false;
-  let isLDown = false; 
-
-  function onBind(){
-    //document.querySelector('input').focus();
-  }
-
-  function onKeyPress (evt: KeyboardEvent) {
-    if (evt.repeat) return;
-    switch (evt.key) {
-      case 'Control':
-          isCtrlDown = true;
-        break;
-      case 'l':
-          isLDown = true;
-        break;
-    }
-    if (isCtrlDown && isLDown) {
-      onBind();
-    }
-  }
 
   function split () {
     if ($splitCount < 4) $splitCount += 1;
   }
 </script>
 
-<svelte:window on:keydown={onKeyPress}/>
 <div class="toolbar">
   <SearchInput/>
   <!-- <input type="checkbox">
