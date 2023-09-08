@@ -88,19 +88,24 @@
   .wrapper {
     width: calc(100% - 10px);
     height: 100%;
-    padding: 10px 0 10px 10px;
+    padding: 0px 0 10px 10px;
     background: var(--tertiary-color);
   }
   .verses-viewport {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
     width: 100%;
     height: 100%;
     overflow-y: auto;
     max-height: calc(100vh - 4rem);
     scroll-behavior: smooth;
   }
+
+  .verses-viewport > div {
+    margin-top: 2rem;
+  }
+
+
   .ref-verse {
     color: blue;
     font-weight: 600;
