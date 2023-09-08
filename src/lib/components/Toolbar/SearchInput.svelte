@@ -23,16 +23,17 @@
    * The book, chapter and verse starts from 0.
    */
   function searchBy(method: string, prompt: string) : void{
+    let thisSearchResult = {
+      results: [] as BibleRef[],
+      selectedVerse: 0 as number,
+      status: {
+        code: 0,
+        message: ""
+      } as MessageCode
+    }
+
     try {
       // DATA //
-      let thisSearchResult = {
-        results: [] as BibleRef[],
-        selectedVerse: 0 as number,
-        status: {
-          code: 0,
-          message: ""
-        } as MessageCode
-      }
 
       const mySearchResult: Record<string,any> = {
         'string': () => {
@@ -103,6 +104,9 @@
           resultChapter = parseInt(promptDigits[0], 10) - 1;
           resultVerse = parseInt(promptDigits[1], 10) - 1; 
 
+          //check if reference is valid
+          if (typeof bibleUsed[resultBook][resultChapter][resultVerse] === 'undefined') throw new Error("reference doesn't exist");
+
           // get all verses of the chapter
           const temp: BibleRef[] = [];
           for (let i = 0; i < bibleUsed[resultBook][resultChapter].length; i++) {
@@ -124,16 +128,22 @@
           }
         }
       }
-
       searchResult.set(mySearchResult[method]());
     } catch (error: any) {
-      console.log("arcipicchia");
-      console.log(error);
+      searchResult.set({
+        results: [],
+        selectedVerse: 0,
+        status: {
+          code: 1,
+          message:"Not a valid reference"
+        }
+      })
     }
   }
   
   function process(prompt: string): void {
-    let method : string = 'reference'
+    if (typeof prompt === 'undefined') return;
+    let method : string = 'reference' 
     if (prompt.startsWith('$')) {
       prompt = prompt.slice(1);
       method = 'string'
