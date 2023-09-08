@@ -22,7 +22,7 @@
    * then "searchResult" value is set to that value.
    * The book, chapter and verse starts from 0.
    */
-  function searchBy(method: string, prompt: string) : void{
+  function searchBy(method: string, prompt: string): void{
     let thisSearchResult = {
       results: [] as BibleRef[],
       selectedVerse: 0 as number,
@@ -34,10 +34,10 @@
 
     try {
       // DATA //
-
       const mySearchResult: Record<string,any> = {
         'string': () => {
           const temp: BibleRef[] = [];
+          prompt = prompt.slice(1);
           prompt = prompt.replace(/\s+/g,' '); //replace all unecessary spaces (maybe typos)
           
           mainloop: for (let b = 0; b < bibleUsed.length; b++) {
@@ -143,12 +143,16 @@
   
   function process(prompt: string): void {
     if (typeof prompt === 'undefined') return;
-    let method : string = 'reference' 
-    if (prompt.startsWith('$')) {
-      prompt = prompt.slice(1);
-      method = 'string'
-    } 
-    searchBy(method,prompt)
+
+    const keyCommand: string = prompt.charAt(0);
+
+    const redirect: Record<string,()=>void> = {
+      '$': () => searchBy('string',prompt),
+      'default': ()=> searchBy('reference',prompt)
+    }
+    
+    const commnad = (redirect[keyCommand] || redirect['default']); 
+    (commnad as () => void)()
   } 
 
   function activateShortcuts (evt: KeyboardEvent) {
