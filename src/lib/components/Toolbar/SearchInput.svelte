@@ -11,9 +11,9 @@
   const mySearchResult: Record<string,()=>Data> = {
     'string': () => {
       const temp: BibleRef[] = [];
-      prompt = prompt.slice(1);
-      prompt = prompt.replace(/\s+/g,' '); //replace all unecessary spaces (maybe typos)
-      const keyWords: string[] = prompt.split("-");
+      let thisPrompt: string = prompt.slice(1);
+      thisPrompt = thisPrompt.replace(/\s+/g,' '); //replace all unecessary spaces (maybe typos)
+      const keyWords: string[] = thisPrompt.split("-");
       console.log(keyWords);
       
       for (let b = 0; b < bibleUsed.length; b++) {
