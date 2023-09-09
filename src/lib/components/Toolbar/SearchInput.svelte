@@ -1,7 +1,6 @@
 <script lang="ts">
   import {openBibles,booksNames, searchResult} from '../../../store'
   import type {BibleRef, MessageCode, Data} from '../../../myInterfaces'
-  import { LogicalPosition } from '@tauri-apps/api/window';
 
   let bibleUsed = $openBibles.kjv;
   let bibleBooks = $booksNames;
@@ -14,7 +13,6 @@
       let thisPrompt: string = prompt.slice(1);
       thisPrompt = thisPrompt.replace(/\s+/g,' '); //replace all unecessary spaces (maybe typos)
       const keyWords: string[] = thisPrompt.split("-");
-      console.log(keyWords);
       
       for (let b = 0; b < bibleUsed.length; b++) {
         for (let c = 0; c < bibleUsed[b].length; c++) {
@@ -100,7 +98,6 @@
       resultBook = i;
       resultChapter = parseInt(promptDigits[0], 10) - 1;
       resultVerse = parseInt(promptDigits[1], 10) - 1; 
-      console.log("sono qua");
       
       //check if reference is valid
       if (!(
