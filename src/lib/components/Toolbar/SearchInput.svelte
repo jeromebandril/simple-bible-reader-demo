@@ -1,6 +1,7 @@
 <script lang="ts">
   import {openBibles,booksNames, searchResult} from '../../../store'
   import type {BibleRef, MessageCode} from '../../../myInterfaces'
+  import { LogicalPosition } from '@tauri-apps/api/window';
 
   let bibleUsed = $openBibles.kjv;
   let bibleBooks = $booksNames;
@@ -39,12 +40,14 @@
           const temp: BibleRef[] = [];
           prompt = prompt.slice(1);
           prompt = prompt.replace(/\s+/g,' '); //replace all unecessary spaces (maybe typos)
+          const keyWords: string[] = prompt.split("-");
+          console.log(keyWords);
           
           mainloop: for (let b = 0; b < bibleUsed.length; b++) {
             for (let c = 0; c < bibleUsed[b].length; c++) {
               for (let v = 0; v < bibleUsed[b][c].length; v++) {
                 let verse: string = bibleUsed[b][c][v];
-                if (verse.toLowerCase().includes(prompt.toLowerCase())) {
+                if (verse.toLowerCase().includes(keyWords[0].toLowerCase())) {
                   temp.push({
                     book: b,
                     chapter: c,
@@ -55,9 +58,37 @@
               }
             }
           }
+
+          const recursive = (index: number, keyWords: string[], temp: BibleRef[]): BibleRef[] => {
+            console.log(keyWords.length);
+            console.log(temp);
+            
+            if (index >= keyWords.length) return temp;
+            
+            
+            const shrinkSearch: BibleRef[] = [];
+            temp.forEach(ref => {
+              const verse = bibleUsed[ref.book][ref.chapter][ref.verse];
+              
+              if (verse.toLowerCase().includes(keyWords[index].toLowerCase())) {
+                shrinkSearch.push ({
+                  book: ref.book,
+                  chapter: ref.chapter,
+                  verse: ref.verse
+                })
+              }
+            });
+            console.log(shrinkSearch);
+            
+            return recursive(index+1,keyWords,shrinkSearch)
+          }
+
+          console.log("temp",temp);
+          
+          let newResult = recursive(1,keyWords,temp);
           //build response
           return thisSearchResult = {
-            results: temp,
+            results: newResult,
             selectedVerse: 0,
             status: {
               code: 0,
