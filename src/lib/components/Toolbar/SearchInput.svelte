@@ -16,7 +16,7 @@
       const keyWords: string[] = prompt.split("-");
       console.log(keyWords);
       
-      mainloop: for (let b = 0; b < bibleUsed.length; b++) {
+      for (let b = 0; b < bibleUsed.length; b++) {
         for (let c = 0; c < bibleUsed[b].length; c++) {
           for (let v = 0; v < bibleUsed[b][c].length; v++) {
             let verse: string = bibleUsed[b][c][v];
@@ -27,7 +27,7 @@
                 verse: v
               })
             }
-            if (temp.length === 500) break mainloop;
+            if (temp.length === 500) throw new Error("Too vague");
           }
         }
       }
@@ -100,10 +100,15 @@
       resultBook = i;
       resultChapter = parseInt(promptDigits[0], 10) - 1;
       resultVerse = parseInt(promptDigits[1], 10) - 1; 
-
+      console.log("sono qua");
+      
       //check if reference is valid
-      if (typeof bibleUsed[resultBook][resultChapter][resultVerse] === 'undefined') throw new Error("reference doesn't exist");
-
+      if (!(
+        bibleUsed[resultBook] && 
+        bibleUsed[resultBook][resultChapter] && 
+        bibleUsed[resultBook][resultChapter][resultVerse]
+        )) throw new Error("reference doesn't exist");
+      
       // get all verses of the chapter
       const temp: BibleRef[] = [];
       for (let i = 0; i < bibleUsed[resultBook][resultChapter].length; i++) {
@@ -135,17 +140,20 @@
     
     try {
       switch (keyCommand) {
-        case '$': 
-          result = mySearchResult['string']();
-          break;
-        default: 
-          result = mySearchResult['default']();
-          
-          break;
+        case '$': result = mySearchResult['string'](); break;
+        default: result = mySearchResult['default'](); break;
       }
       searchResult.set(result)
-    } catch (error) {
-
+    } catch (error: any) {
+      searchResult.set({
+        results: [],
+        selectedVerse: 0,
+        status: {
+          code: 1,
+          message: error as string
+        }
+      })
+            
     }
   } 
 
