@@ -88,7 +88,7 @@
   .wrapper {
     width: calc(100% - 10px);
     height: 100vh;
-    padding: 0px 0 10px 10px;
+    padding-left: 10px;
     background: var(--tertiary-color);
   }
   .wrapper.darkmode {
