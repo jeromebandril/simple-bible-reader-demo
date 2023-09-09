@@ -1,6 +1,6 @@
 import { invoke } from '@tauri-apps/api/tauri';
 import { writable, readable } from 'svelte/store';
-import type { BibleRef, MessageCode } from './myInterfaces';
+import type { BibleRef, Data, MessageCode } from './myInterfaces';
 
 const resourcePath: string = '\\smyrna\\src-tauri\\assets\\data\\bibles\\kjv-english.json';
 
@@ -14,4 +14,4 @@ export const searchResult = writable({
   results: [] as BibleRef[],
   selectedVerse: 0 as number,
   status: {} as MessageCode
-});
+} as Data);
