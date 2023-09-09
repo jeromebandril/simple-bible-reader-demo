@@ -37,7 +37,7 @@
         temp.forEach(ref => {
           const verse = bibleUsed[ref.book][ref.chapter][ref.verse];
           
-          if (verse.toLowerCase().includes(keyWords[index].toLowerCase())) {
+          if (verse.toLowerCase().includes(keyWords[index].toLowerCase().trim())) {
             shrinkSearch.push ({
               book: ref.book,
               chapter: ref.chapter,
