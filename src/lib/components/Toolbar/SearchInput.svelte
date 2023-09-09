@@ -17,7 +17,7 @@
       for (let b = 0; b < bibleUsed.length; b++) {
         for (let c = 0; c < bibleUsed[b].length; c++) {
           for (let v = 0; v < bibleUsed[b][c].length; v++) {
-            let verse: string = bibleUsed[b][c][v];
+            let verse: string = bibleUsed[b][c][v].replace(/[^a-zA-Z0-9\s]/g,'');
             if (verse.toLowerCase().includes(keyWords[0].toLowerCase())) {
               temp.push({
                 book: b,
@@ -35,7 +35,7 @@
         
         const shrinkSearch: BibleRef[] = [];
         temp.forEach(ref => {
-          const verse = bibleUsed[ref.book][ref.chapter][ref.verse];
+          let verse = bibleUsed[ref.book][ref.chapter][ref.verse].replace(/[^a-zA-Z0-9\s]/g,'');
           
           if (verse.toLowerCase().includes(keyWords[index].toLowerCase().trim())) {
             shrinkSearch.push ({
