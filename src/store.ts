@@ -15,3 +15,4 @@ export const searchResult = writable({
   selectedVerse: 0 as number,
   status: {} as MessageCode
 } as Data);
+export const isDarkMode = writable(false);

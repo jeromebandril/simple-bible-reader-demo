@@ -1,6 +1,6 @@
 <script lang="ts">
-  import {openBibles,booksNames, searchResult} from '../../../store'
-  import type {BibleRef, MessageCode, Data} from '../../../myInterfaces'
+  import {isDarkMode,openBibles,booksNames, searchResult} from '../../../store'
+  import type {BibleRef, Data} from '../../../myInterfaces'
 
   let bibleUsed = $openBibles.kjv;
   let bibleBooks = $booksNames;
@@ -164,7 +164,7 @@
 
 <svelte:window on:keydown={activateShortcuts}/>
 <form>
-  <input bind:value={prompt} type="text" placeholder="Search">
+  <input bind:value={prompt} type="text" placeholder="Search" class:darkmode={$isDarkMode}>
   <button on:click={()=>{process(prompt)}}>go</button>
 </form>
   
@@ -183,5 +183,9 @@
     outline: none;
     border-radius: var(--border-radius);
     min-width: 300px;
+  }
+  input.darkmode{
+    background: var(--dark-secondary-color);
+    color: var(--tertiary-color);
   }
 </style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {openBibles,searchResult, shortBooksNames} from '../../store'
+  import {isDarkMode,openBibles,searchResult, shortBooksNames} from '../../store'
   
   // OPTIONS //
   const MAX_ZOOM_OUT: number = 0.5;
@@ -64,14 +64,14 @@
 
 <div></div>
 <svelte:window on:keydown={moveTruVerses}/>
-<div on:wheel={zoom} class="wrapper" style="font-size: {fontSize}px;">
+<div on:wheel={zoom} class="wrapper" class:darkmode={$isDarkMode} style="font-size: {fontSize}px;">
   {#if $searchResult.status.code === 0}
     <div use:scrollToVerse={$searchResult.selectedVerse} id="container" class="verses-viewport">
       {#each results as res, i} 
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div on:click={highlightVerse} id={String(i)} class:selected={i === selectedVerse} class="wrap-verse">
-          <span class="ref-verse">{$shortBooksNames[res.book]} {res.chapter+1}:{res.verse+1}</span>
+          <span class="ref-verse" class:darkmode={$isDarkMode}>{$shortBooksNames[res.book]} {res.chapter+1}:{res.verse+1}</span>
           <span class="verse">{currentBible[res.book][res.chapter][res.verse]}</span>
         </div>
       {/each}
@@ -87,10 +87,15 @@
 <style>
   .wrapper {
     width: calc(100% - 10px);
-    height: 100%;
+    height: 100vh;
     padding: 0px 0 10px 10px;
     background: var(--tertiary-color);
   }
+  .wrapper.darkmode {
+    background-color: var(--dark-primary-color);
+    color: var(--tertiary-color);
+  }
+
   .verses-viewport {
     display: flex;
     flex-direction: column;
@@ -109,6 +114,9 @@
   .ref-verse {
     color: blue;
     font-weight: 600;
+  }
+  .ref-verse.darkmode {
+    color: yellow;
   }
 
   .selected {

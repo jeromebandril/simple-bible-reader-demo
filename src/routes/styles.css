@@ -10,7 +10,7 @@
   --tertiary-color: rgb(255, 255, 255);
   --paper-color: rgb(242, 239, 230);
   --dark-primary-color: rgb(39, 39, 43);
-  --dark-seconday-color: rgb(44, 44, 49);
+  --dark-secondary-color: rgb(44, 44, 49);
   --border-radius: 12px;
   font-family: var(--font-body);
   color: var(--primary-color);
@@ -19,7 +19,6 @@
 body {
   min-height: 100vh;
   margin: 0rem;
-  background: var(--color-bg-1);
   overscroll-behavior: none;
   -webkit-user-select: none;
   -ms-user-select: none;

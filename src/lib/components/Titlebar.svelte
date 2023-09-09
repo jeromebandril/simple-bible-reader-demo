@@ -1,11 +1,12 @@
 <script lang="ts">
   import { appWindow  } from "@tauri-apps/api/window";
+  import { isDarkMode } from "../../store";
   import smyrnaIcon from "$lib/images/32x32.png"
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="titlebar">
+<div class="titlebar" class:darkmode={$isDarkMode}>
   <div data-tauri-drag-region="" class="drag-area"></div>
   <div class="titlebar-icon-wrapper">
     <img src={smyrnaIcon} height={16} alt="icon">
@@ -32,15 +33,6 @@
 
 
 <style>
-  .drag-area {
-    position: absolute;
-    top: 4px;
-    width: calc(100% - 100px);
-    border-radius: 20px;
-    left: 4px;
-    height: 24px;
-  }
-
   .titlebar {
     min-height: 30px;
     background: var(--secondary-color);
@@ -48,6 +40,19 @@
     display: flex;
     justify-content: space-between;
     z-index: 9999;
+  }
+  .titlebar.darkmode{
+    background: var(--dark-primary-color);
+    color: var(--tertiary-color);
+  }
+
+  .drag-area {
+    position: absolute;
+    top: 4px;
+    width: calc(100% - 100px);
+    border-radius: 20px;
+    left: 4px;
+    height: 24px;
   }
 
   .titlebar-icon-wrapper {

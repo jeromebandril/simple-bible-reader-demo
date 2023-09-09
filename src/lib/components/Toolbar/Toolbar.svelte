@@ -1,7 +1,7 @@
 <script lang="ts">
   import BibleChooser from './BibleChooser.svelte';
   import SearchInput from './SearchInput.svelte';
-  import {splitCount} from '../../../store' 
+  import {isDarkMode,splitCount} from '../../../store' 
 
 
   function split () {
@@ -9,12 +9,14 @@
   }
 </script>
 
-<div class="toolbar">
+<div class="toolbar" class:darkmode={$isDarkMode}>
   <SearchInput/>
   <!-- <input type="checkbox">
   <label for="">presentation mode</label> -->
   <BibleChooser/>
   <button on:click={split}>split</button>
+  <button on:click={() => {isDarkMode.set(!$isDarkMode); console.log($isDarkMode);
+  }}>switch theme</button>
 </div>
 
 <style>
@@ -29,5 +31,9 @@
     background: white;
     padding: 0 10px;
     background: var(--secondary-color);
+  }
+  .toolbar.darkmode{
+    background: var(--dark-primary-color);
+    color: var(--tertiary-color);
   }
 </style>
