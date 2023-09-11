@@ -15,8 +15,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="titlebar" class:darkmode={$isDarkMode}>
-  <div data-tauri-drag-region="" class="drag-area"></div>
+<div  data-tauri-drag-region class="titlebar" class:darkmode={$isDarkMode}>
   <div class="titlebar-icon-wrapper">
     <img src={smyrnaIcon} height={16} alt="icon">
     <span>Smyrna Bible</span>
@@ -51,15 +50,6 @@
   .titlebar.darkmode{
     background: var(--dark-primary-color);
     color: var(--tertiary-color);
-  }
-
-  .drag-area {
-    position: absolute;
-    top: 4px;
-    width: calc(100% - 150px);
-    border-radius: 20px;
-    left: 4px;
-    height: 24px;
   }
 
   .titlebar-icon-wrapper {

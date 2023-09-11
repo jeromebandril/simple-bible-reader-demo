@@ -161,7 +161,11 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: black ;
+    background: var(--primary-color) ;
     border-radius: 8px 0 0 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: black;
   }
 </style>
