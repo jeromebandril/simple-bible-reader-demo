@@ -13,11 +13,22 @@
   $: results = $searchResult.results
   $: selectedVerse = $searchResult.selectedVerse;
 
-  function scrollToVerse (node: Element, id: number) {
+
+  interface ScrollOptions {
+    listen_target: any,
+    behavior: string,
+    block: string
+  }
+
+
+  function scrollToVerse (node: Element, options: ScrollOptions) {
     const update = () => {
       const item = node.querySelector('.selected');
       if (item)
-        item.scrollIntoView({ behavior: 'auto' });  
+        item.scrollIntoView({ 
+          behavior: options.behavior as ScrollBehavior,
+          block: options.block as ScrollLogicalPosition 
+        });  
     }
     update();
     return {update};
@@ -44,16 +55,30 @@
   function moveTruVerses (evt: KeyboardEvent) {
     if(evt.repeat) return;
 
+    let newSelected: HTMLElement | null = null;
     switch (evt.key) {
       case 'ArrowLeft':
-        if (selectedVerse > 0) selectedVerse -= 1
+        if (selectedVerse > 0){
+          selectedVerse -= 1
+          newSelected = document.querySelector('.selected')!.previousSibling as HTMLElement
+        }
         break;
     
       case 'ArrowRight':
-        if (selectedVerse < results.length - 1) selectedVerse += 1;
+        if (selectedVerse < results.length - 1) {
+          selectedVerse += 1;
+          newSelected = document.querySelector('.selected')!.nextSibling as HTMLElement
+        }
         break;
     }
-  }
+    
+    if (newSelected) {
+      const container = document.querySelector('.wrapper');
+      const containerBound = container!.getBoundingClientRect();
+      const targetBounds = newSelected.getBoundingClientRect();
+      if (targetBounds.top < containerBound.top || targetBounds.bottom > containerBound.bottom) scrollToVerse(container!,{listen_target:null,behavior: 'auto',block: 'center'})
+    }
+  } 
 
   function highlightVerse (evt: MouseEvent) {
     const element = evt.currentTarget as HTMLDivElement;
@@ -66,7 +91,7 @@
 <svelte:window on:keydown={moveTruVerses}/>
 <div on:wheel={zoom} class="wrapper" class:darkmode={$isDarkMode} style="font-size: {fontSize}px;">
   {#if $searchResult.status.code === 0}
-    <div use:scrollToVerse={$searchResult.selectedVerse} id="container" class="verses-viewport">
+    <div use:scrollToVerse={{listen_target: $searchResult.selectedVerse, behavior: 'auto', block: 'start'}} id="container" class="verses-viewport">
       {#each results as res, i} 
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -87,7 +112,6 @@
 <style>
   .wrapper {
     width: calc(100% - 10px);
-    height: 100vh;
     padding-left: 10px;
     background: var(--tertiary-color);
   }
