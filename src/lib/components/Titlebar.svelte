@@ -41,7 +41,7 @@
 
 <style>
   .titlebar {
-    min-height: 30px;
+    height: 2rem;
     background: var(--secondary-color);
     user-select: none;
     display: flex;

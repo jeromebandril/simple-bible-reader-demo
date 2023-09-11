@@ -111,6 +111,7 @@
 
 <style>
   .wrapper {
+    height: calc(100vh - 4rem - 2rem);
     width: calc(100% - 10px);
     padding-left: 10px;
     background: var(--tertiary-color);
