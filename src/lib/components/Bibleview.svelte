@@ -129,4 +129,14 @@
   .wrap-verse {
     float: left;
   }
+
+  ::-webkit-scrollbar {
+    background: white;
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: black ;
+    border-radius: 8px 0 0 8px;
+  }
 </style>
