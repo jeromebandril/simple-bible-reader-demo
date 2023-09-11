@@ -165,7 +165,9 @@
 <svelte:window on:keydown={activateShortcuts}/>
 <form>
   <input bind:value={prompt} type="text" placeholder="Search" class:darkmode={$isDarkMode}>
-  <button on:click={()=>{process(prompt)}}>go</button>
+  <button on:click={()=>{process(prompt)}} class:darkmode={$isDarkMode}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="m9 13.887l5-5V8.18l-5-5l-.707.707l4.146 4.147H2v1h10.44L8.292 13.18l.707.707z" clip-rule="evenodd"/></svg>
+  </button>
 </form>
   
 <style>
