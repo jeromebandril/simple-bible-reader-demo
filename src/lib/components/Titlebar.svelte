@@ -56,7 +56,7 @@
   .drag-area {
     position: absolute;
     top: 4px;
-    width: calc(100% - 100px);
+    width: calc(100% - 150px);
     border-radius: 20px;
     left: 4px;
     height: 24px;
@@ -67,27 +67,26 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    gap: 2px;
     margin-left: 10px;
   }
 
+  .titlebar-buttons {
+    display: flex;
+  }
   .titlebar-buttons > div {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 30px;
+    width: 45px;
     height: 100%;
   }
-
   .titlebar-buttons > div:hover {
     transition: 150ms;
     background: lightgray;
   }
-
   .titlebar-buttons.darkmode > div:hover {
     background: darkslategray
   }
-
   #titlebar-close:hover {
     transition: 150ms;
     color: white;
