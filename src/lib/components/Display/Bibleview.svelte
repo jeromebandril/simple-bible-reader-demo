@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {isDarkMode,openBibles,searchResult, shortBooksNames} from '../../store'
+  import {isDarkMode,openBibles,searchResult, shortBooksNames} from '../../../store'
   
   // OPTIONS //
   const MAX_ZOOM_OUT: number = 0.5;
