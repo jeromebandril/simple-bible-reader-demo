@@ -156,16 +156,6 @@
   }
 
   ::-webkit-scrollbar {
-    background: white;
-    width: 6px;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: var(--primary-color) ;
-    border-radius: 8px 0 0 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background-color: black;
+    display: none;
   }
 </style>
