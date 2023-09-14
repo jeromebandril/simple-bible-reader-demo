@@ -8,7 +8,6 @@
   let isMaximized: boolean;
   onMount(async () => {
     isMaximized = await appWindow.isMaximized();
-    console.log(isMaximized);
   });
 
 </script>
