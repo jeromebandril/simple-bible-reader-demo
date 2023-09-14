@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { getContext, setContext } from 'svelte';
-  import {isDarkMode, searchResult} from '../../../store';
+  import { setContext } from 'svelte';
+  import {isDarkMode, searchResult, shortBooksNames} from '../../../store';
   import { writable } from 'svelte/store';
   export let isSplitResolved = false;
+  export let sources: any;
 
   // OPTIONS //
   const MAX_ZOOM_OUT: number = 0.5;
@@ -19,7 +20,7 @@
   // CONTEXTS
   setContext('result', thisResult);
   setContext('selVerse',thisSelVerse)
-  
+
   // FUNCTIONS
   interface ScrollOptions {
     listen_target: any,
@@ -84,6 +85,10 @@
     //   if (targetBounds.top < containerBound.top || targetBounds.bottom > containerBound.bottom) scrollToVerse(container!,{listen_target:null,behavior: 'auto',block: 'center'})
     // }
   } 
+  function highlightVerse (evt: MouseEvent) {
+    const element = evt.currentTarget as HTMLDivElement;
+    $thisSelVerse = parseInt(element.id);
+  }
 </script>
 
 <svelte:window on:keydown={moveTruVerses}/>
@@ -91,10 +96,21 @@
   {#if !isSplitResolved}
     <button>ciao</button>
   {:else if $searchResult.status.code === 0}
-    <div use:scrollToVerse={{listen_target: $searchResult.selectedVerse, behavior: 'auto', block: 'start'}} id="container">
-      <slot name="split-1"/>
-      <slot name="split-2"/>
-    </div>
+    <table use:scrollToVerse={{listen_target: $searchResult.selectedVerse, behavior: 'auto', block: 'start'}} class="verses-viewport">
+      {#each $searchResult.results as res, i}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <tr on:click={highlightVerse} id={String(i)} class:selected={i === $thisSelVerse}>
+          {#each sources as source }
+          <td>
+            <span class="ref-verse" class:darkmode={$isDarkMode}>{$shortBooksNames[res.book]} {res.chapter+1}:{res.verse+1}</span>
+            <span class="verse">{source[res.book][res.chapter][res.verse]}</span>
+          </td>
+          {/each}
+        </tr>
+      {/each}
+    </table>
+    <div class="spacer"/>
   {:else}
     <div>
       {$searchResult.status.message}
@@ -103,22 +119,46 @@
 </div>
 
 <style>
-  #container {
-    display: flex;
-    flex-direction: row;
-    overflow-y: auto;
-  }
   .wrapper {
     height: calc(100vh - 4rem - 2rem + .5px);
     width: calc(100% - 10px);
     padding-left: 10px;
     background: var(--tertiary-color);
+    overflow: auto;
   }
   .wrapper.darkmode {
     background-color: var(--dark-primary-color);
     color: var(--tertiary-color);
   }
+
+  .verses-viewport{
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - 4rem);
+    scroll-behavior: smooth;
+    overflow-y: auto;
+  }
+  td {
+    vertical-align: top;
+    text-align: left;
+    padding-right: 10px;
+  }
+
+  .ref-verse {
+    color: blue;
+    font-weight: 600;
+  }
+  .ref-verse.darkmode {
+    color: yellow;
+  }
+  .selected {
+    color: brown;
+  }
+  .spacer {
+    min-height: 20rem;
+  }
+
   ::-webkit-scrollbar {
-    display: none;
+    display: block;
   }
 </style>
