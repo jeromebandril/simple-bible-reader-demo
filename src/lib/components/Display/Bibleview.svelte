@@ -188,8 +188,9 @@
   }
   .marker {
     position: absolute;
+    left: calc(50% - 20%);
     background-color: blue;
     height: 2px;
-    width: 100%;
+    width: 40%;
   }
 </style>
