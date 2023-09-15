@@ -17,6 +17,7 @@
   $: thisSelVerse = $thisResult.selectedVerse;
   let versesViewport: HTMLElement;
   let wrapper: HTMLElement;
+  let wrapperScrollTop: number;
 
   // FUNCTIONS
   interface ScrollOptions {
@@ -98,12 +99,18 @@
       thisSelVerse = $thisResult.selectedVerse
     }
   }
+  function bindScroll () {
+    wrapperScrollTop = wrapper.scrollTop
+  }
   $: updateResult($searchResult)
 </script>
 
 <svelte:window on:keydown={shortcuts}/>
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div on:wheel={zoom} class="wrapper" class:darkmode={$isDarkMode} class:select-panel-mode={$selectPanelMode} style="font-size: {fontSize}px;" bind:this={wrapper}>
+<div on:wheel={zoom} class="wrapper" class:darkmode={$isDarkMode} class:select-panel-mode={$selectPanelMode} style="font-size: {fontSize}px;" bind:this={wrapper} on:scroll={bindScroll}>
+  {#if idb === $focusedViewId}
+  <div class="marker" style="top: {wrapperScrollTop}px"/>
+  {/if}
   {#if $searchResult.status.code === 0}
       <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
       <!-- svelte-ignore a11y-positive-tabindex -->
@@ -178,5 +185,11 @@
 
   .select-panel-mode:hover {
     filter: brightness(90%);
+  }
+  .marker {
+    position: absolute;
+    background-color: blue;
+    height: 2px;
+    width: 100%;
   }
 </style>
