@@ -1,9 +1,7 @@
 <script lang="ts">
-  import { setContext } from 'svelte';
-  import {isDarkMode, searchResult, shortBooksNames} from '../../../store';
-  import { writable } from 'svelte/store';
-  export let isSplitResolved = false;
-  export let sources: any;
+  import {isDarkMode, openBibles, searchResult, shortBooksNames, selectPanelMode} from '../../../store';
+  export let sources: any = [$openBibles.kjv];
+  export let idb: number;
 
   // OPTIONS //
   const MAX_ZOOM_OUT: number = 0.5;
@@ -15,11 +13,9 @@
   let currentScale = DEFAULT_SCALE;
   $: fontSize = DEFAULT_FONT_SIZE * currentScale;
   let thisResult = searchResult;
-  let thisSelVerse = writable($searchResult.selectedVerse);
-
-  // CONTEXTS
-  setContext('result', thisResult);
-  setContext('selVerse',thisSelVerse)
+  $: thisSelVerse = $searchResult.selectedVerse
+  let versesViewport: HTMLElement;
+  let wrapper: HTMLElement;
 
   // FUNCTIONS
   interface ScrollOptions {
@@ -62,54 +58,61 @@
     let newSelected: HTMLElement | null = null;
     switch (evt.key) {
       case 'ArrowLeft':
-        if ($thisSelVerse > 0){
-          $thisSelVerse -= 1
-          //newSelected = document.querySelector('.selected')!.previousSibling as HTMLElement
+        if (thisSelVerse > 0){
+          thisSelVerse -= 1
+          newSelected = versesViewport.querySelector('.selected')!.previousSibling as HTMLElement
         }
         break;
     
       case 'ArrowRight':
-        if ($thisSelVerse < $thisResult.results.length - 1) {
-          $thisSelVerse += 1;
-          //newSelected = document.querySelector('.selected')!.nextSibling as HTMLElement
+        if (thisSelVerse < $thisResult.results.length - 1) {
+          thisSelVerse += 1;
+          newSelected = versesViewport.querySelector('.selected')!.nextSibling as HTMLElement
         }
         break;
     }
     
-    // note: temp disabled  
-    // description: scroll automatically when next select is out of view
-    // if (newSelected) {
-    //   const container = document.querySelector('.wrapper');
-    //   const containerBound = container!.getBoundingClientRect();
-    //   const targetBounds = newSelected.getBoundingClientRect();
-    //   if (targetBounds.top < containerBound.top || targetBounds.bottom > containerBound.bottom) scrollToVerse(container!,{listen_target:null,behavior: 'auto',block: 'center'})
-    // }
+    if (newSelected) {
+      const containerBound = wrapper.getBoundingClientRect();
+      const targetBounds = newSelected.getBoundingClientRect();
+      if (targetBounds.top < containerBound.top || targetBounds.bottom > containerBound.bottom) scrollToVerse(wrapper,{listen_target:null,behavior: 'auto',block: 'center'})
+    }
   } 
   function highlightVerse (evt: MouseEvent) {
     const element = evt.currentTarget as HTMLDivElement;
-    $thisSelVerse = parseInt(element.id);
+    thisSelVerse = parseInt(element.id);
+  }
+  function shortcuts (evt: KeyboardEvent) {
+    if(evt.repeat) return;
+    if (evt.ctrlKey && evt.key===idb.toString()) {
+      versesViewport.focus();
+      console.log("id",idb,"key",evt.key);
+    }
+    
   }
 </script>
 
-<svelte:window on:keydown={moveTruVerses}/>
-<div on:wheel={zoom} class="wrapper" class:darkmode={$isDarkMode} style="font-size: {fontSize}px;">
-  {#if !isSplitResolved}
-    <button>ciao</button>
-  {:else if $searchResult.status.code === 0}
-    <table use:scrollToVerse={{listen_target: $searchResult.selectedVerse, behavior: 'auto', block: 'start'}} class="verses-viewport">
-      {#each $searchResult.results as res, i}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <tr on:click={highlightVerse} id={String(i)} class:selected={i === $thisSelVerse}>
-          {#each sources as source }
-          <td>
-            <span class="ref-verse" class:darkmode={$isDarkMode}>{$shortBooksNames[res.book]} {res.chapter+1}:{res.verse+1}</span>
-            <span class="verse">{source[res.book][res.chapter][res.verse]}</span>
-          </td>
-          {/each}
-        </tr>
-      {/each}
-    </table>
+<svelte:window on:keydown={shortcuts}/>
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div on:wheel={zoom} class="wrapper" class:darkmode={$isDarkMode} class:select-panel-mode={$selectPanelMode} style="font-size: {fontSize}px;" bind:this={wrapper}>
+  {#if $searchResult.status.code === 0}
+      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+      <!-- svelte-ignore a11y-positive-tabindex -->
+      <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+      <table tabindex="1" on:keydown={moveTruVerses} use:scrollToVerse={{listen_target: $searchResult.selectedVerse, behavior: 'auto', block: 'start'}} bind:this={versesViewport} class="verses-viewport">
+        {#each $searchResult.results as res, i}
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
+          <tr on:click={highlightVerse} id={String(i)} class:selected={i === thisSelVerse}>
+            {#each sources as source }
+            <td>
+              <span class="ref-verse" class:darkmode={$isDarkMode}>{$shortBooksNames[res.book]} {res.chapter+1}:{res.verse+1}</span>
+              <span class="verse">{source[res.book][res.chapter][res.verse]}</span>
+            </td>
+            {/each}
+          </tr>
+        {/each}
+      </table>
     <div class="spacer"/>
   {:else}
     <div>
@@ -125,23 +128,25 @@
     padding-left: 10px;
     background: var(--tertiary-color);
     overflow: auto;
+    scroll-behavior: smooth;
+    border-right: 1px solid black;
+    position: relative;
   }
   .wrapper.darkmode {
     background-color: var(--dark-primary-color);
     color: var(--tertiary-color);
   }
 
-  .verses-viewport{
+  table.verses-viewport{
     width: 100%;
     height: 100%;
     max-height: calc(100vh - 4rem);
-    scroll-behavior: smooth;
-    overflow-y: auto;
+    border-spacing: 0 1rem;
+    outline: none;
   }
   td {
     vertical-align: top;
     text-align: left;
-    padding-right: 10px;
   }
 
   .ref-verse {
@@ -160,5 +165,9 @@
 
   ::-webkit-scrollbar {
     display: block;
+  }
+
+  .select-panel-mode:hover {
+    filter: brightness(90%);
   }
 </style>

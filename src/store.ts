@@ -21,3 +21,4 @@ export const searchResult = writable({
   status: {} as MessageCode
 } as Data);
 export const isDarkMode = writable(false);
+export const selectPanelMode = writable(false);
