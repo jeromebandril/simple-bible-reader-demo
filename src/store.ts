@@ -22,3 +22,4 @@ export const searchResult = writable({
 } as Data);
 export const isDarkMode = writable(false);
 export const selectPanelMode = writable(false);
+export const focusedViewId = writable(1);

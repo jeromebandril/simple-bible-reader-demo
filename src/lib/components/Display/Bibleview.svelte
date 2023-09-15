@@ -1,5 +1,6 @@
 <script lang="ts">
-  import {isDarkMode, openBibles, searchResult, shortBooksNames, selectPanelMode} from '../../../store';
+  import { writable } from 'svelte/store';
+  import {isDarkMode, openBibles, searchResult, shortBooksNames, selectPanelMode, focusedViewId} from '../../../store';
   export let sources: any = [$openBibles.kjv];
   export let idb: number;
 
@@ -12,8 +13,8 @@
   // VARIABLES
   let currentScale = DEFAULT_SCALE;
   $: fontSize = DEFAULT_FONT_SIZE * currentScale;
-  let thisResult = searchResult;
-  $: thisSelVerse = $searchResult.selectedVerse
+  let thisResult = writable($searchResult);
+  $: thisSelVerse = $thisResult.selectedVerse;
   let versesViewport: HTMLElement;
   let wrapper: HTMLElement;
 
@@ -86,10 +87,18 @@
     if(evt.repeat) return;
     if (evt.ctrlKey && evt.key===idb.toString()) {
       versesViewport.focus();
-      console.log("id",idb,"key",evt.key);
+      $focusedViewId = idb;
+      console.log($focusedViewId);
+      
     }
-    
   }
+  function updateResult (searchResult: any) {
+    if (idb === $focusedViewId) {
+      $thisResult = searchResult;
+      thisSelVerse = $thisResult.selectedVerse
+    }
+  }
+  $: updateResult($searchResult)
 </script>
 
 <svelte:window on:keydown={shortcuts}/>
@@ -99,8 +108,8 @@
       <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
       <!-- svelte-ignore a11y-positive-tabindex -->
       <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-      <table tabindex="1" on:keydown={moveTruVerses} use:scrollToVerse={{listen_target: $searchResult.selectedVerse, behavior: 'auto', block: 'start'}} bind:this={versesViewport} class="verses-viewport">
-        {#each $searchResult.results as res, i}
+      <table tabindex="1" on:keydown={moveTruVerses} use:scrollToVerse={{listen_target: $thisResult.selectedVerse, behavior: 'auto', block: 'start'}} bind:this={versesViewport} class="verses-viewport">
+        {#each $thisResult.results as res, i}
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <!-- svelte-ignore a11y-no-static-element-interactions -->
           <tr on:click={highlightVerse} id={String(i)} class:selected={i === thisSelVerse}>
