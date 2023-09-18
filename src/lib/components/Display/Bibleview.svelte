@@ -149,7 +149,7 @@
     {/if}
   {:else}
     <div>
-      {$searchResult.status.message}
+      {$thisResult.status.message}
     </div>
   {/if}
 </div>
