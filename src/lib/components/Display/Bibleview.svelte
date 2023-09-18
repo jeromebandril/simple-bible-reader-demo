@@ -6,14 +6,11 @@
 </script>
 
 <script lang="ts">
-  import {isDarkMode, openBibles, searchResult, shortBooksNames, selectPanelMode} from '../../../store';
+  import {isFullscreen, openBibles, searchResult, shortBooksNames, selectPanelMode, isDarkMode} from '../../../store';
   import Scrollbar from '../Scrollbar.svelte';
-  import { afterUpdate } from 'svelte';
-  import { LogicalPosition } from '@tauri-apps/api/window';
   export let sources: any = [$openBibles.kjv];
 
   // OPTIONS //
-  const SCROLLBAR_WIDTH = 20;
   const MAX_ZOOM_OUT: number = 0.5;
   const MAX_ZOOM_IN: number = 4;
   const DEFAULT_FONT_SIZE: number = 25;
@@ -119,7 +116,8 @@
 
 <svelte:window on:keydown={shortcuts}/>
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div on:wheel={zoom} class="wrapper" class:darkmode={$isDarkMode} class:select-panel-mode={$selectPanelMode} style="font-size: {fontSize}px;" bind:this={wrapper}>
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div on:wheel={zoom} on:click={focusThis} class="wrapper" class:fullscreen={$isFullscreen} class:select-panel-mode={$selectPanelMode} style="font-size: {fontSize}px;" bind:this={wrapper}>
   {#if componentId === $focusedId}
     <div class="marker"/>
   {/if}
@@ -132,7 +130,7 @@
         {#each $thisResult.results as res, i}
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <tr on:click={highlightVerse} id={String(i)} class:selected={i === thisSelVerse}>
+          <tr on:click={highlightVerse} id={String(i)} class:selected={i === thisSelVerse} class:darkmode={$isDarkMode}>
             {#each sources as source }
             <td>
               <span class="ref-verse" class:darkmode={$isDarkMode}>{$shortBooksNames[res.book]} {res.chapter+1}:{res.verse+1}</span>
@@ -156,16 +154,14 @@
 
 <style>
   .wrapper {
-    height: calc(100vh - 4rem - 2rem + .5px);
+    height: calc(100vh - 4rem - 2rem + 0.5px);
     width: calc(100% - 10px);
     padding-left: 10px;
-    background: var(--tertiary-color);
     border-right: 1px solid black;
     position: relative;
   }
-  .wrapper.darkmode {
-    background-color: var(--dark-primary-color);
-    color: var(--tertiary-color);
+  .wrapper.fullscreen {
+    height: calc(100vh - 4rem);
   }
 
   .verses-viewport {
@@ -180,6 +176,7 @@
     border-spacing: 0 1rem;
     outline: none;
   }
+
   .verses-table td {
     vertical-align: top;
     text-align: left;
@@ -195,6 +192,11 @@
   .verses-table .selected {
     color: brown;
   }
+
+  .verses-table .selected.darkmode {
+    color: lightskyblue;
+  }
+
   .verses-viewport .spacer {
     min-height: 20rem;
   }
@@ -206,7 +208,6 @@
   .select-panel-mode:hover {
     filter: brightness(90%);
   }
-
   .marker {
     position: absolute;
     left: calc(50% - 20%);

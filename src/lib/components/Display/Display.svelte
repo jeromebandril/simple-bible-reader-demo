@@ -4,7 +4,7 @@
    * - make panels resizable
   */
   import Bibleview from "./Bibleview.svelte";
-  import { openBibles,split,selectPanelMode } from "../../../store";
+  import { openBibles,split,selectPanelMode, isDarkMode } from "../../../store";
 
   let sources = [$openBibles.kjv,$openBibles.ita];
   let splitCount = $split.count;
@@ -21,7 +21,7 @@
 
 </script>
 
-<div class="display">
+<div class="display" class:darkmode={$isDarkMode}>
   {#each {length: splitCount }  as _}
     <Bibleview/>
   {/each }
@@ -54,6 +54,11 @@
   .display {
     display: flex;
     flex-direction: row;
+    background: var(--tertiary-color);
+  }
+  .display.darkmode {
+    background-color: var(--dark-secondary-color);
+    color: var(--tertiary-color);
   }
   .split-menu {
     width: 100%;
