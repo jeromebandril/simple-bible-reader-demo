@@ -4,10 +4,11 @@
   import smyrnaIcon from "$lib/images/32x32.png"
   import { onMount } from "svelte";
 
-
+  let title: string;
   let isMaximized: boolean;
   onMount(async () => {
     isMaximized = await appWindow.isMaximized();
+    title = await appWindow.title();
   });
 
 </script>
@@ -17,7 +18,9 @@
 <div  data-tauri-drag-region class="titlebar" class:darkmode={$isDarkMode}>
   <div class="titlebar-icon-wrapper">
     <img src={smyrnaIcon} height={16} alt="icon">
-    <span>Smyrna Bible</span>
+    {#if title}
+      &nbsp{title}
+    {/if}
   </div>
   <div class="titlebar-buttons" class:darkmode={$isDarkMode}>
     <div on:click={appWindow.minimize} id="titlebar-minimize">
