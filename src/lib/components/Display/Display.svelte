@@ -1,14 +1,13 @@
 <script lang="ts">
   /**
    * TODO: 
-   * - make indipendent searchResult for each bibleView
    * - make panels resizable
   */
   import Bibleview from "./Bibleview.svelte";
   import { openBibles,split,selectPanelMode } from "../../../store";
 
-  let sources = [$openBibles.kjv];
-  let splitCount = 0;
+  let sources = [$openBibles.kjv,$openBibles.ita];
+  let splitCount = $split.count;
 
   function addBibleview () {
     splitCount++;
@@ -23,14 +22,20 @@
 </script>
 
 <div class="display">
-  {#each {length: splitCount + 1}  as _, i}
-    <Bibleview idb={i+1}/>
+  {#each {length: splitCount }  as _}
+    <Bibleview/>
   {/each }
   {#if !$split.isResolved}
     <div class="split-menu">
-      <button on:click={addParallel}>parallel</button>
-      <button on:click={addBibleview}>independent</button>
-      <div class="options">
+      {#if !$selectPanelMode} 
+        <button on:click={addParallel}>parallel</button>
+        <button on:click={addBibleview}>independent</button>
+      {:else}
+        <div>
+          select which one
+        </div>
+      {/if}
+      <!-- <div class="options">
         <div>
           <input type="radio">
           <label for="">kjv english</label>
@@ -39,7 +44,7 @@
           <input type="radio">
           <label for="">Giovanni Diodati italian</label>
         </div>
-      </div>
+      </div> -->
     </div>
   {/if}
   
@@ -56,7 +61,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid black;
     gap: 10px;
   }
   .split-menu button {
