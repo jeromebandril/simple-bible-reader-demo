@@ -39,9 +39,9 @@
           
           if (verse.toLowerCase().includes(keyWords[index].toLowerCase().trim())) {
             shrinkSearch.push ({
-              book: ref.book,
+              book:    ref.book,
               chapter: ref.chapter,
-              verse: ref.verse
+              verse:   ref.verse
             })
           }
         });
@@ -62,16 +62,17 @@
     },
 
     'default' : () => {
-      let resultBook: number;
-      let resultChapter: number;
-      let resultVerse: number;
+      let resultBook    : number;
+      let resultChapter : number;
+      let resultVerse   : number;
 
       // Divide prompt into two: book reference and chapter+verse
-      const rawResult = prompt.match(/(.*[a-zA-Z]\s*)(.*)/);
-      const rawBook = rawResult && rawResult[1];
-      const rawChapVer = rawResult && rawResult[2];
+      const rawResult   = prompt.match(/(.*[a-zA-Z]\s*)(.*)/);
+      const rawBook     = rawResult && rawResult[1];
+      const rawChapVer  = rawResult && rawResult[2];
       
-      if (rawBook === null || rawChapVer === null) throw Error('no characters or too short');
+      if (rawBook === null || rawChapVer === null) 
+        throw Error('no characters or too short');
       
       // Clean string and distinguish book, chapter and verse
       const cleanedBook = rawBook.replace(/[\s\W]/g, ''); //remove all spaces and special characters 
@@ -95,9 +96,9 @@
       }
 
       // final results
-      resultBook = i;
+      resultBook    = i;
       resultChapter = parseInt(promptDigits[0], 10) - 1;
-      resultVerse = parseInt(promptDigits[1], 10) - 1; 
+      resultVerse   = parseInt(promptDigits[1], 10) - 1; 
       
       //check if reference is valid
       if (!(
@@ -110,9 +111,9 @@
       const temp: BibleRef[] = [];
       for (let i = 0; i < bibleUsed[resultBook][resultChapter].length; i++) {
         temp.push({
-          book: resultBook,
+          book:    resultBook,
           chapter: resultChapter,
-          verse: i,
+          verse:   i,
         })
       }
 
@@ -155,10 +156,12 @@
   } 
 
   function activateShortcuts (evt: KeyboardEvent) {
-    if (evt.repeat) return;
-    if (evt.ctrlKey && evt.key === 'l') {
-      document.querySelector('input')!.focus();
-    }
+    if (evt.repeat) 
+      return;
+    if (evt.ctrlKey && evt.key === 'l') 
+      document.querySelector('input')!.focus(); 
+    if (evt.ctrlKey && evt.altKey && evt.key === 'l') 
+      prompt = ''
   }
 </script>
 

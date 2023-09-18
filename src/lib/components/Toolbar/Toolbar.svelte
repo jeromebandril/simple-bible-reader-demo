@@ -1,12 +1,14 @@
 <script lang="ts">
-  import BibleChooser from './BibleChooser.svelte';
   import SearchInput from './SearchInput.svelte';
   import {isDarkMode,split} from '../../../store' 
 
 
   function splitDisplay () {
+    if (!$split.isResolved) return;
     if ($split.count < 4) $split.count += 1;
+    $split.isResolved = false;
   }
+
 </script>
 
 <div class="toolbar" class:darkmode={$isDarkMode}>
