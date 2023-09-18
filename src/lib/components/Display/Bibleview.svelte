@@ -1,8 +1,13 @@
-<script lang="ts">
+<script context="module" lang="ts">
   import { writable } from 'svelte/store';
-  import {isDarkMode, openBibles, searchResult, shortBooksNames, selectPanelMode, focusedViewId} from '../../../store';
+
+  const focusedId = writable(1);
+  let id = 1;
+</script>
+
+<script lang="ts">
+  import {isDarkMode, openBibles, searchResult, shortBooksNames, selectPanelMode} from '../../../store';
   export let sources: any = [$openBibles.kjv];
-  export let idb: number;
 
   // OPTIONS //
   const MAX_ZOOM_OUT: number = 0.5;
@@ -11,6 +16,7 @@
   const DEFAULT_SCALE: number = 1;
 
   // VARIABLES
+  const componentId = id++;
   let currentScale = DEFAULT_SCALE;
   $: fontSize = DEFAULT_FONT_SIZE * currentScale;
   let thisResult = writable($searchResult);
@@ -85,18 +91,22 @@
     thisSelVerse = parseInt(element.id);
   }
   function shortcuts (evt: KeyboardEvent) {
-    if(evt.repeat) return;
-    if (evt.ctrlKey && evt.key===idb.toString()) {
+    if(evt.repeat) 
+      return;
+    if (evt.ctrlKey && evt.key===componentId.toString()) 
+      focusThis()
+  }
+  function focusThis () {
+    if (versesViewport) {
       versesViewport.focus();
-      $focusedViewId = idb;
-      console.log($focusedViewId);
-      
+      $focusedId = componentId;
     }
   }
   function updateResult (searchResult: any) {
-    if (idb === $focusedViewId) {
+    if (componentId === $focusedId) {
       $thisResult = searchResult;
       thisSelVerse = $thisResult.selectedVerse
+      focusThis()
     }
   }
   function bindScroll () {
@@ -108,10 +118,10 @@
 <svelte:window on:keydown={shortcuts}/>
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div on:wheel={zoom} class="wrapper" class:darkmode={$isDarkMode} class:select-panel-mode={$selectPanelMode} style="font-size: {fontSize}px;" bind:this={wrapper} on:scroll={bindScroll}>
-  {#if idb === $focusedViewId}
+  {#if componentId === $focusedId}
   <div class="marker" style="top: {wrapperScrollTop}px"/>
   {/if}
-  {#if $searchResult.status.code === 0}
+  {#if $thisResult.status.code === 0}
       <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
       <!-- svelte-ignore a11y-positive-tabindex -->
       <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -155,7 +165,6 @@
 
   table.verses-viewport{
     width: 100%;
-    height: 100%;
     max-height: calc(100vh - 4rem);
     border-spacing: 0 1rem;
     outline: none;
