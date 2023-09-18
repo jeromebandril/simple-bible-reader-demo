@@ -6,11 +6,11 @@
     Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   --font-mono: 'Fira Mono', monospace;
   --primary-color: rgb(41, 47, 51);
-  --secondary-color: rgb(247, 247, 247);
+  --secondary-color: rgb(243, 243, 243);
   --tertiary-color: rgb(255, 255, 255);
   --paper-color: rgb(242, 239, 230);
-  --dark-primary-color: rgb(39, 39, 43);
-  --dark-secondary-color: rgb(44, 44, 49);
+  --dark-primary-color: rgb(24, 24, 24);
+  --dark-secondary-color: rgb(31, 31, 31);
   --border-radius: 2px;
   font-family: var(--font-body);
   color: var(--primary-color);
