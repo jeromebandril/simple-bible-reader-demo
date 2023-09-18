@@ -7,9 +7,13 @@
 
 <script lang="ts">
   import {isDarkMode, openBibles, searchResult, shortBooksNames, selectPanelMode} from '../../../store';
+  import Scrollbar from '../Scrollbar.svelte';
+  import { afterUpdate } from 'svelte';
+  import { LogicalPosition } from '@tauri-apps/api/window';
   export let sources: any = [$openBibles.kjv];
 
   // OPTIONS //
+  const SCROLLBAR_WIDTH = 20;
   const MAX_ZOOM_OUT: number = 0.5;
   const MAX_ZOOM_IN: number = 4;
   const DEFAULT_FONT_SIZE: number = 25;
@@ -21,9 +25,9 @@
   $: fontSize = DEFAULT_FONT_SIZE * currentScale;
   let thisResult = writable($searchResult);
   $: thisSelVerse = $thisResult.selectedVerse;
-  let versesViewport: HTMLElement;
+  let versesTable: HTMLElement;
   let wrapper: HTMLElement;
-  let wrapperScrollTop: number;
+  let scrollableContainer: HTMLElement;
 
   // FUNCTIONS
   interface ScrollOptions {
@@ -68,14 +72,14 @@
       case 'ArrowLeft':
         if (thisSelVerse > 0){
           thisSelVerse -= 1
-          newSelected = versesViewport.querySelector('.selected')!.previousSibling as HTMLElement
+          newSelected = versesTable.querySelector('.selected')!.previousSibling as HTMLElement
         }
         break;
     
       case 'ArrowRight':
         if (thisSelVerse < $thisResult.results.length - 1) {
           thisSelVerse += 1;
-          newSelected = versesViewport.querySelector('.selected')!.nextSibling as HTMLElement
+          newSelected = versesTable.querySelector('.selected')!.nextSibling as HTMLElement
         }
         break;
     }
@@ -97,8 +101,8 @@
       focusThis()
   }
   function focusThis () {
-    if (versesViewport) {
-      versesViewport.focus();
+    if (versesTable) {
+      versesTable.focus();
       $focusedId = componentId;
     }
   }
@@ -109,23 +113,22 @@
       focusThis()
     }
   }
-  function bindScroll () {
-    wrapperScrollTop = wrapper.scrollTop
-  }
   $: updateResult($searchResult)
+
 </script>
 
 <svelte:window on:keydown={shortcuts}/>
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div on:wheel={zoom} class="wrapper" class:darkmode={$isDarkMode} class:select-panel-mode={$selectPanelMode} style="font-size: {fontSize}px;" bind:this={wrapper} on:scroll={bindScroll}>
+<div on:wheel={zoom} class="wrapper" class:darkmode={$isDarkMode} class:select-panel-mode={$selectPanelMode} style="font-size: {fontSize}px;" bind:this={wrapper}>
   {#if componentId === $focusedId}
-  <div class="marker" style="top: {wrapperScrollTop}px"/>
+    <div class="marker"/>
   {/if}
   {#if $thisResult.status.code === 0}
-      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-      <!-- svelte-ignore a11y-positive-tabindex -->
-      <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-      <table tabindex="1" on:keydown={moveTruVerses} use:scrollToVerse={{listen_target: $thisResult.selectedVerse, behavior: 'auto', block: 'start'}} bind:this={versesViewport} class="verses-viewport">
+    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+    <!-- svelte-ignore a11y-positive-tabindex -->
+    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+    <div bind:this={scrollableContainer} class="verses-viewport">
+      <table tabindex="1" on:keydown={moveTruVerses} use:scrollToVerse={{listen_target: $thisResult.selectedVerse, behavior: 'auto', block: 'start'}} bind:this={versesTable} class="verses-table">
         {#each $thisResult.results as res, i}
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -138,13 +141,17 @@
             {/each}
           </tr>
         {/each}
+        <div class="spacer"/>
       </table>
-    <div class="spacer"/>
+    </div>
+    {#if scrollableContainer}
+      <Scrollbar content={versesTable} {scrollableContainer}/>
+    {/if}
   {:else}
     <div>
       {$searchResult.status.message}
     </div>
-  {/if} 
+  {/if}
 </div>
 
 <style>
@@ -153,8 +160,6 @@
     width: calc(100% - 10px);
     padding-left: 10px;
     background: var(--tertiary-color);
-    overflow: auto;
-    scroll-behavior: smooth;
     border-right: 1px solid black;
     position: relative;
   }
@@ -163,38 +168,45 @@
     color: var(--tertiary-color);
   }
 
-  table.verses-viewport{
+  .verses-viewport {
+    height: 100%;
+    overflow: auto;
+    scroll-behavior: smooth;
     width: 100%;
-    max-height: calc(100vh - 4rem);
+  }
+
+  .verses-table {
+    height: 100%;
     border-spacing: 0 1rem;
     outline: none;
   }
-  td {
+  .verses-table td {
     vertical-align: top;
     text-align: left;
   }
 
-  .ref-verse {
+  .verses-table .ref-verse {
     color: blue;
     font-weight: 600;
   }
-  .ref-verse.darkmode {
+  .verses-table .ref-verse.darkmode {
     color: yellow;
   }
-  .selected {
+  .verses-table .selected {
     color: brown;
   }
-  .spacer {
+  .verses-viewport .spacer {
     min-height: 20rem;
   }
 
   ::-webkit-scrollbar {
-    display: block;
+    display: none;
   }
 
   .select-panel-mode:hover {
     filter: brightness(90%);
   }
+
   .marker {
     position: absolute;
     left: calc(50% - 20%);
