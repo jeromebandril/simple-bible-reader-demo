@@ -81,7 +81,8 @@
       // if book contains digits (e.g. 1 john, 1 peter, 1 samuel etc...) add space in between
       const promptBook = (/\d/.test(cleanedBook)) ? cleanedBook.replace(/(\d)([a-zA-Z])/g, '$1 $2') : cleanedBook;
       const promptDigits: string[] | null= rawChapVer.match(/\d+/g) || []; //collect all digits into array
-      // If verse is not specified, go to verse 1
+      // If chapter or verse is not specified, go to 1
+      if (promptDigits.length < 1) promptDigits.push('1');
       if (promptDigits.length < 2) promptDigits.push('1');
 
       // Get index of the book
