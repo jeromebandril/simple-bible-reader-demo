@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-  import { writable, type Writable } from 'svelte/store';
+  import {writable} from 'svelte/store';
 
   const focusedId = writable(1);
   let id = 1;
@@ -8,7 +8,6 @@
 <script lang="ts">
   import {isFullscreen, openBibles, searchResult, shortBooksNames, selectPanelMode, isDarkMode, isManuallyScrolling} from '../../../store';
   import Scrollbar from '../Scrollbar.svelte';
-  import { getContext } from 'svelte';
   export let sources: any = [$openBibles.kjv];
 
   // OPTIONS //
