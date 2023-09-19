@@ -7,6 +7,7 @@
 
 <script lang="ts">
   import {isFullscreen, openBibles, searchResult, shortBooksNames, selectPanelMode, isDarkMode} from '../../../store';
+  import Scrollbar from '../Scrollbar.svelte';
   export let sources: any = [$openBibles.kjv];
 
   // OPTIONS //
@@ -140,6 +141,9 @@
         <div class="spacer"/>
       </table>
     </div>
+    {#if versesTable && scrollableContainer}
+      <Scrollbar {scrollableContainer} content={versesTable}/>
+    {/if}
   {:else}
     <div>
       {$thisResult.status.message}
@@ -156,6 +160,9 @@
     border-right: 1px solid black;
     position: relative;
   }
+  .wrapper:hover {
+    --scrollbar-init-opacity: 1;
+  }
   .wrapper.fullscreen {
     height: calc(100vh - 4rem);
   }
@@ -163,15 +170,21 @@
   /** verses viewport*/
   .verses-viewport {
     height: 100%;
-    overflow: auto;
-    scroll-behavior: smooth;
+    overflow: scroll;
+    /* scroll-behavior: smooth; */
     width: 100%;
+
+    box-sizing: border-box;
+    position: relative;
   }
   .verses-viewport .spacer {
     min-height: 20rem;
   }
+  ::-webkit-scrollbar {
+    display: none;
+  }
 
-  .verses-viewport::-webkit-scrollbar {
+  /* .verses-viewport::-webkit-scrollbar {
     visibility: hidden;
     background: none;
     border-left: 1px solid lightgray;
@@ -195,7 +208,7 @@
   .verses-viewport:hover::-webkit-scrollbar,
   .verses-viewport:hover::-webkit-scrollbar-thumb {
     visibility: visible;
-  }
+  } */
 
   /* verses table */
   .verses-table {
