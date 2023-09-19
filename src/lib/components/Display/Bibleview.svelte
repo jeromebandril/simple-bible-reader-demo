@@ -7,7 +7,6 @@
 
 <script lang="ts">
   import {isFullscreen, openBibles, searchResult, shortBooksNames, selectPanelMode, isDarkMode} from '../../../store';
-  import Scrollbar from '../Scrollbar.svelte';
   export let sources: any = [$openBibles.kjv];
 
   // OPTIONS //
@@ -111,7 +110,6 @@
     }
   }
   $: updateResult($searchResult)
-
 </script>
 
 <svelte:window on:keydown={shortcuts}/>
@@ -125,7 +123,7 @@
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <!-- svelte-ignore a11y-positive-tabindex -->
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-    <div bind:this={scrollableContainer} class="verses-viewport">
+    <div bind:this={scrollableContainer} class="verses-viewport" class:darkmode={$isDarkMode}>
       <table tabindex="1" on:keydown={moveTruVerses} use:scrollToVerse={{listen_target: $thisResult.selectedVerse, behavior: 'auto', block: 'start'}} bind:this={versesTable} class="verses-table">
         {#each $thisResult.results as res, i}
           <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -142,9 +140,6 @@
         <div class="spacer"/>
       </table>
     </div>
-    {#if scrollableContainer}
-      <Scrollbar content={versesTable} {scrollableContainer}/>
-    {/if}
   {:else}
     <div>
       {$thisResult.status.message}
@@ -153,6 +148,7 @@
 </div>
 
 <style>
+  /** wrapper */
   .wrapper {
     height: calc(100vh - 4rem - 2rem + 0.5px);
     width: calc(100% - 10px);
@@ -164,13 +160,44 @@
     height: calc(100vh - 4rem);
   }
 
+  /** verses viewport*/
   .verses-viewport {
     height: 100%;
     overflow: auto;
     scroll-behavior: smooth;
     width: 100%;
   }
+  .verses-viewport .spacer {
+    min-height: 20rem;
+  }
 
+  .verses-viewport::-webkit-scrollbar {
+    visibility: hidden;
+    background: none;
+    border-left: 1px solid lightgray;
+    z-index: 100;
+    transition: visibility 0.3 ease;
+  }
+  .verses-viewport::-webkit-scrollbar-thumb {
+    background: rgba(30, 30, 30,10%);
+    visibility: hidden;
+    transition: visibility 1 ease;
+  }
+  .verses-viewport::-webkit-scrollbar-thumb:hover {
+    background: rgba(30, 30, 30,30%);
+  }
+  .verses-viewport.darkmode::-webkit-scrollbar {
+    border-left: 1px solid rgb(0, 0, 0);
+  }
+  .verses-viewport.darkmode::-webkit-scrollbar-thumb {
+    background: rgba(47, 47, 47,100%);
+  }
+  .verses-viewport:hover::-webkit-scrollbar,
+  .verses-viewport:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+  }
+
+  /* verses table */
   .verses-table {
     height: 100%;
     border-spacing: 0 1rem;
@@ -197,22 +224,15 @@
     color: lightskyblue;
   }
 
-  .verses-viewport .spacer {
-    min-height: 20rem;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-
+  /** others */
   .select-panel-mode:hover {
     filter: brightness(90%);
   }
   .marker {
     position: absolute;
     left: calc(50% - 20%);
-    background-color: blue;
-    height: 2px;
+    border-top: 2px solid blue;
+    height: 10px;
     width: 40%;
   }
 </style>
