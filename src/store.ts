@@ -21,6 +21,5 @@ export const searchResult = writable({
   status: {} as MessageCode
 } as Data);
 export const isDarkMode = writable(false);
-export const selectPanelMode = writable(false);
 export const isFullscreen = writable(false);
 export const isManuallyScrolling = writable(false);

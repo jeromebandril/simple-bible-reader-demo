@@ -6,7 +6,7 @@
 </script>
 
 <script lang="ts">
-  import {isFullscreen, openBibles, searchResult, shortBooksNames, selectPanelMode, isDarkMode, isManuallyScrolling} from '../../../store';
+  import {isFullscreen, openBibles, searchResult, shortBooksNames, isDarkMode, isManuallyScrolling} from '../../../store';
   import Scrollbar from '../Scrollbar.svelte';
   export let sources: any = [$openBibles.kjv];
 
@@ -116,7 +116,7 @@
 <svelte:window on:keydown={shortcuts}/>
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div on:wheel={zoom} on:click={focusThis} class="wrapper" class:fullscreen={$isFullscreen} class:select-panel-mode={$selectPanelMode} style="font-size: {fontSize}px;" bind:this={wrapper}>
+<div on:wheel={zoom} on:click={focusThis} class="wrapper" class:fullscreen={$isFullscreen} style="font-size: {fontSize}px;" bind:this={wrapper}>
   {#if componentId === $focusedId}
     <div class="marker"/>
   {/if}
@@ -240,9 +240,6 @@
   }
 
   /** others */
-  .select-panel-mode:hover {
-    filter: brightness(90%);
-  }
   .marker {
     position: absolute;
     left: calc(50% - 20%);

@@ -5,7 +5,7 @@
   */
   import Bibleview from "./Bibleview.svelte";
   import Divider from "./Divider.svelte";
-  import { openBibles,split,selectPanelMode, isDarkMode } from "../../../store";
+  import { openBibles,split, isDarkMode } from "../../../store";
 
   let sources = [$openBibles.kjv,$openBibles.ita];
   let splitCount = $split.count;
@@ -16,7 +16,6 @@
   }
 
   function addParallel () {
-    $selectPanelMode=true;
     //make parallel bible to select panel
   }
 
@@ -30,15 +29,9 @@
     {/if}
   {/each }
   {#if !$split.isResolved}
-    <div class="split-menu">
-      {#if !$selectPanelMode} 
+    <div class="split-menu"> 
         <button on:click={addParallel}>parallel</button>
         <button on:click={addBibleview}>independent</button>
-      {:else}
-        <div>
-          select which one
-        </div>
-      {/if}
       <!-- <div class="options">
         <div>
           <input type="radio">
