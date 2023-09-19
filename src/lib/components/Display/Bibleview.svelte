@@ -26,8 +26,6 @@
   let versesTable: HTMLElement;
   let wrapper: HTMLElement;
   let scrollableContainer: HTMLElement;
-  const isManualScrolling = getContext('scrollbar') as Writable<boolean>;
-  $: console.log($isManualScrolling);
   
   // FUNCTIONS
   interface ScrollOptions {
