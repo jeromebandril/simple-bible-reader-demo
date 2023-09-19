@@ -1,13 +1,14 @@
 <script context="module" lang="ts">
-  import { writable } from 'svelte/store';
+  import { writable, type Writable } from 'svelte/store';
 
   const focusedId = writable(1);
   let id = 1;
 </script>
 
 <script lang="ts">
-  import {isFullscreen, openBibles, searchResult, shortBooksNames, selectPanelMode, isDarkMode} from '../../../store';
+  import {isFullscreen, openBibles, searchResult, shortBooksNames, selectPanelMode, isDarkMode, isManuallyScrolling} from '../../../store';
   import Scrollbar from '../Scrollbar.svelte';
+  import { getContext } from 'svelte';
   export let sources: any = [$openBibles.kjv];
 
   // OPTIONS //
@@ -25,7 +26,9 @@
   let versesTable: HTMLElement;
   let wrapper: HTMLElement;
   let scrollableContainer: HTMLElement;
-
+  const isManualScrolling = getContext('scrollbar') as Writable<boolean>;
+  $: console.log($isManualScrolling);
+  
   // FUNCTIONS
   interface ScrollOptions {
     listen_target: any,
@@ -124,7 +127,7 @@
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <!-- svelte-ignore a11y-positive-tabindex -->
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-    <div bind:this={scrollableContainer} class="verses-viewport" class:darkmode={$isDarkMode}>
+    <div bind:this={scrollableContainer} class="verses-viewport" class:darkmode={$isDarkMode} class:smooth={$isManuallyScrolling}>
       <table tabindex="1" on:keydown={moveTruVerses} use:scrollToVerse={{listen_target: $thisResult.selectedVerse, behavior: 'auto', block: 'start'}} bind:this={versesTable} class="verses-table">
         {#each $thisResult.results as res, i}
           <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -171,11 +174,13 @@
   .verses-viewport {
     height: 100%;
     overflow: scroll;
-    /* scroll-behavior: smooth; */
     width: 100%;
-
+    scroll-behavior: smooth;
     box-sizing: border-box;
     position: relative;
+  }
+  .verses-viewport.smooth {
+    scroll-behavior:unset;
   }
   .verses-viewport .spacer {
     min-height: 20rem;

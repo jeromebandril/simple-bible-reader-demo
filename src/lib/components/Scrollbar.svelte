@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isDarkMode } from "../../store";
+  import { isDarkMode, isManuallyScrolling } from "../../store";
   export let scrollableContainer: HTMLElement;
   export let content: HTMLElement;
   
@@ -9,24 +9,25 @@
   let isDrag: boolean;
   let startY: number;
 
+
   function positionThumb () {
     thumbHeight = (trackHeight*trackHeight) / content.offsetHeight;
     thumbTop = (scrollableContainer.scrollTop * trackHeight) / content.offsetHeight;
     content.scrollTop = (thumbTop / trackHeight) * content.offsetHeight;
-    console.log("sdanfnsadfjn");
-    
   }
 
   function startDrag (evt: MouseEvent) {
     isDrag = true;
     startY = evt.offsetY;
     scrollableContainer.removeEventListener('scroll',positionThumb);
+    $isManuallyScrolling = true;
   }
 
   function stopDrag () {
     if (isDrag) {
       isDrag = false;
       scrollableContainer.addEventListener('scroll',positionThumb);
+      $isManuallyScrolling = false;
     }
   }
 
