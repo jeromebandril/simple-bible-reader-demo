@@ -1,5 +1,5 @@
 # The Smyrna Bible App
-I've noticed that most of the application available are pretty outdated and looks old (even if they are perfectly functioning), so I made a simple app for displaying the scripture during service time, using Tauri + Svelte.
+I've noticed that most of the application available are pretty outdated and looks old (and some of them, e.g. e-sword, are commonly used but they are not actually made for this porpouse only), so I made a simple app for displaying the scripture during service time, with a pleasing look, using Tauri + Svelte.
 
 Darkmode:
 ![image](https://github.com/jeromebandril/smyrna-bible/assets/102626866/1fea242f-be02-4889-9b75-57ae113039d4)
