@@ -2,7 +2,8 @@
   import SearchInput from './SearchInput.svelte';
   import {isDarkMode,isFullscreen,split} from '../../../store' 
   import {appWindow} from '@tauri-apps/api/window'
-
+  
+  let isOpen = false;
 
   function splitDisplay () {
     if (!$split.isResolved) return;
@@ -23,19 +24,13 @@
     })
   }
 
-  let isOpen = false;
   function toggleToolsMenu () {
     isOpen = !isOpen;
-
   }
 </script>
 
 <div class="toolbar" class:darkmode={$isDarkMode}>
-  <div>
-    <SearchInput/>
-  </div>
-  <!-- <input type="checkbox">
-  <label for="">presentation mode</label> -->
+  <SearchInput/>
   <div>
     <div class:close={!isOpen} class:open={isOpen}  class="toolmenu">
       <button on:click={setFullscreen} class:darkmode={$isDarkMode}>

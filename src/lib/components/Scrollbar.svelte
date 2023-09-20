@@ -44,12 +44,10 @@
 </script>
 
 <svelte:window on:mouseup={stopDrag} on:mousemove={thumbScroll}/>
-<!-- {#if scrollableContainer.offsetHeight <= content.offsetHeight} -->
-  <div class="track" bind:offsetHeight={trackHeight} class:darkmode={$isDarkMode}>
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div on:mousedown={startDrag} style="height: {thumbHeight}px; top: {thumbTop}px;"/>
-  </div>
-<!-- {/if} -->
+<div class="track" bind:offsetHeight={trackHeight} class:darkmode={$isDarkMode}>
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <div on:mousedown={startDrag} style="height: {thumbHeight}px; top: {thumbTop}px;"/>
+</div>
 
 <style>
   .track {

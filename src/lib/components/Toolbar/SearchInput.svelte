@@ -3,10 +3,8 @@
   import type {BibleRef, Data} from '../../../myInterfaces'
 
   $: bibleUsed = $openBibles.kjv;
-  
   let bibleBooks = $booksNames;
   let prompt: string;
-
 
   const mySearchResult: Record<string,()=>Data> = {
     'string': () => {
@@ -131,7 +129,6 @@
     }
   }
 
-
   function process(prompt: string): void {
     if (typeof prompt === 'undefined') return;
 
@@ -153,7 +150,6 @@
           message: error as string
         }
       })
-            
     }
   } 
 
@@ -182,7 +178,6 @@
     align-items: center;
     gap: 0.2rem;
   }
-
   input {
     background: var(--tertiary-color);
     padding-left: 10px;

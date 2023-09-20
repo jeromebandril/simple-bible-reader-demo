@@ -1,6 +1,4 @@
-<script></script>
-
-<div class="divider"></div>
+<div class="divider"/>
 
 <style>
   .divider {

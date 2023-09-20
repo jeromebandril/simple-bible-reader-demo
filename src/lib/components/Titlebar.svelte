@@ -10,7 +10,6 @@
     isMaximized = await appWindow.isMaximized();
     title = await appWindow.title();
   });
-
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -38,7 +37,6 @@
     </div>
   </div>
 </div>
-
 
 <style>
   .titlebar {
