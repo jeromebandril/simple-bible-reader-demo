@@ -25,14 +25,16 @@
   let splitCount = $split.count;
 
   function addBibleview () {
+    $split.count++;
     splitCount++;
     $split.isResolved = true;
   }
 
   function addParallel () {
-    //make parallel bible to select panel
     let newSource = $openBibles.ita;
     sources[$focusedId-1] = [...sources[$focusedId-1],newSource]
+
+    $split.count++;
     $split.isResolved = true;
   }
 </script>

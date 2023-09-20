@@ -6,7 +6,7 @@
 
   function splitDisplay () {
     if (!$split.isResolved) return;
-    if ($split.count < 4) $split.count += 1;
+    if ($split.count >= 4)  return;
     $split.isResolved = false;
   }
 
