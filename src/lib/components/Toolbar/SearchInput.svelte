@@ -2,7 +2,8 @@
   import {isDarkMode,openBibles,booksNames, searchResult} from '../../../store'
   import type {BibleRef, Data} from '../../../myInterfaces'
 
-  let bibleUsed = $openBibles.kjv;
+  $: bibleUsed = $openBibles.kjv;
+  
   let bibleBooks = $booksNames;
   let prompt: string;
 

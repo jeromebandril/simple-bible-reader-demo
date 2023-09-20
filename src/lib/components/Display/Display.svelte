@@ -6,6 +6,15 @@
   import Bibleview from "./Bibleview.svelte";
   import Divider from "./Divider.svelte";
   import { openBibles,split, isDarkMode } from "../../../store";
+  import { onMount } from "svelte";
+  import { invoke } from "@tauri-apps/api/tauri";
+
+  onMount(async()=>{
+    const resourcePath: string = '\\smyrna\\src-tauri\\assets\\data\\bibles\\english\\kjv-english.json';
+    const italianBible: string = '\\smyrna\\src-tauri\\assets\\data\\bibles\\italian\\giovanni-diodati.json';
+    $openBibles.kjv = JSON.parse(await invoke('read_file', { filePath: resourcePath }))
+    $openBibles.ita = JSON.parse(await invoke('read_file', { filePath: italianBible }))
+  })
 
   let sources = [$openBibles.kjv,$openBibles.ita];
   let splitCount = $split.count;
@@ -19,11 +28,17 @@
     //make parallel bible to select panel
   }
 
+  function test () {
+    console.log($openBibles);
+  }
+
 </script>
 
-<div class="display" class:darkmode={$isDarkMode}>
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div class="display" class:darkmode={$isDarkMode} on:click={test}>
   {#each {length: splitCount }  as _,i}
-    <Bibleview/>
+    <Bibleview />
     {#if splitCount > 1 && i < splitCount-1}
       <Divider/>
     {/if}

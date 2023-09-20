@@ -8,8 +8,9 @@
 <script lang="ts">
   import {isFullscreen, openBibles, searchResult, shortBooksNames, isDarkMode, isManuallyScrolling} from '../../../store';
   import Scrollbar from '../Scrollbar.svelte';
-  export let sources: any = [$openBibles.kjv];
-
+  $: ({sources} = $$props);
+  $: if (!sources) sources = [$openBibles.kjv];  
+  
   // OPTIONS //
   const MAX_ZOOM_OUT: number = 0.5;
   const MAX_ZOOM_IN: number = 4;
