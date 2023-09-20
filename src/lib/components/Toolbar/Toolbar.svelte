@@ -53,9 +53,9 @@
     </div>
     <button class:darkmode={$isDarkMode} on:click={toggleToolsMenu}>
       {#if isOpen}
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="m5.928 7.976l4.357 4.357l-.618.62L5 8.284v-.618L9.667 3l.618.619l-4.357 4.357z" clip-rule="evenodd"/></svg>
-      {:else}
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M10.072 8.024L5.715 3.667l.618-.62L11 7.716v.618L6.333 13l-.618-.619l4.357-4.357z" clip-rule="evenodd"/></svg>
+      {:else}
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="m5.928 7.976l4.357 4.357l-.618.62L5 8.284v-.618L9.667 3l.618.619l-4.357 4.357z" clip-rule="evenodd"/></svg>
       {/if}
     </button>
   </div>
