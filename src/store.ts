@@ -19,3 +19,4 @@ export const searchResult = writable({
 export const isDarkMode = writable(false);
 export const isFullscreen = writable(false);
 export const isManuallyScrolling = writable(false);
+export const focusedId = writable(1);

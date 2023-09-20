@@ -1,12 +1,10 @@
 <script context="module" lang="ts">
-  import {writable} from 'svelte/store';
-
-  const focusedId = writable(1);
   let id = 1;
 </script>
 
 <script lang="ts">
-  import {isFullscreen, openBibles, searchResult, shortBooksNames, isDarkMode, isManuallyScrolling} from '../../../store';
+  import { writable } from 'svelte/store';
+  import {focusedId,isFullscreen, openBibles, searchResult, shortBooksNames, isDarkMode, isManuallyScrolling} from '../../../store';
   import Scrollbar from '../Scrollbar.svelte';
   $: ({sources} = $$props);
   $: if (!sources) sources = [$openBibles.kjv];  
